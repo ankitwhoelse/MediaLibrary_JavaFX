@@ -6,5 +6,8 @@ public class teste1 {
 		System.out.println("tete2");
 		System.out.println("shrekv2");
 		
+		
+		System.out.println("testligne");
+		
 	}
 }
