@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -35,7 +37,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import modele.Catalogue;
+import modele.DeserialisationCatalogue;
 import modele.Document;
+import modele.SerialisationCatalogue;
 
 public class Interface extends Application{
 
@@ -133,7 +138,7 @@ public class Interface extends Application{
 //					< INTERFACE DE CATALOGUE >		
 			root2 = new BorderPane();
 			BorderPane.setMargin(root2, new Insets(10));
-			scene2 = new Scene(root2, 800, 400);
+			scene2 = new Scene(root2, 825, 400);
 			stage2 = new Stage();
 			stage2.setScene(scene2);
 			stage2.setTitle("Mediatheque");
@@ -167,6 +172,10 @@ public class Interface extends Application{
 			
 			hBoxSearch.getChildren().addAll(txtSearch, rbAuteur, rbMotsCles, txtRecherche, btnSearch);
 			
+			HBox hBoxCata = new HBox();
+			
+			Catalogue cata = Catalogue.getCatalogue();
+			System.out.println(cata.getLstDoc());
 			
 //				onglet documents
 			Tab tabDoc = new Tab();
@@ -180,8 +189,10 @@ public class Interface extends Application{
 			TableColumn<Document, LocalDate> colonneParution1 = new TableColumn<Document, LocalDate> ("Date de parution");
 			TableColumn<Document, String> colonneDispo1 = new TableColumn<Document, String> ("Disponible");
 			tableDoc.getColumns().addAll(colonneNum1, colonneTitre1, colonneParution1, colonneDispo1);
-//			tableDoc.setItems();	// get list documentd
 			
+			System.out.println(cata.getLstDoc());
+			final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(cata.getLstDoc());
+			tableDoc.setItems(donneesDoc);
 			
 			colonneNum1.setPrefWidth(120);
 			colonneNum1.setMaxWidth(120);
@@ -283,30 +294,73 @@ public class Interface extends Application{
 			colonnePerio.setMaxWidth(130);
 			tabPerio.setContent(tablePerio);
 			
+			Tab tabAdmin = new Tab();
+			Tab tabPrepo = new Tab();
+			Tab tabAdher = new Tab();
 			
-//			onglet personnel
-			Tab tabCompt = new Tab();
-			tabCompt.setClosable(false);
-			tabCompt.setText("Compte");
+			if (true) {			// if logged in comme admin	
+			//			onglet admin
+				tabAdmin.setClosable(false);
+				tabAdmin.setText("Admin");
+				
+				VBox vBoxUtil = new VBox();
 			
-			VBox vBoxUtil = new VBox();
-		
-			Text txtUtil = new Text();
-			txtUtil.setText("Utilisateur: ");
-			VBox.setMargin(txtUtil, new Insets(10));
+				Text txtUtil = new Text();
+				txtUtil.setText("Utilisateur: ");
+				VBox.setMargin(txtUtil, new Insets(10));
+				
+				vBoxUtil.getChildren().addAll(txtUtil);
+				tabAdmin.setContent(vBoxUtil);
+			}
 			
-			vBoxUtil.getChildren().addAll(txtUtil);
-			tabCompt.setContent(vBoxUtil);
+			if (true) {			// if logged in comme prepo	
+			//			onglet prepose
+				tabPrepo.setClosable(false);
+				tabPrepo.setText("Prepose");
+				
+				VBox vBoxUtil = new VBox();
+			
+				Text txtUtil = new Text();
+				txtUtil.setText("Utilisateur: ");
+				VBox.setMargin(txtUtil, new Insets(10));
+				
+				vBoxUtil.getChildren().addAll(txtUtil);
+				tabPrepo.setContent(vBoxUtil);
+			}
+			
+			if (true) {			// if logged in comme adher	
+			//			onglet admin
+				tabAdher.setClosable(false);
+				tabAdher.setText("Adherant");
+				
+				VBox vBoxUtil = new VBox();
+			
+				Text txtUtil = new Text();
+				txtUtil.setText("Utilisateur: ");
+				VBox.setMargin(txtUtil, new Insets(10));
+				
+				vBoxUtil.getChildren().addAll(txtUtil);
+				tabAdher.setContent(vBoxUtil);
+			}
+			
+			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabAdmin, tabPrepo, tabAdher);
+			
+			VBox vBoxCata = new VBox();
+			VBox.setMargin(vBoxCata, new Insets(5));
+			
+			Button btnEmprunter = new Button("Emprunter");
+			Button btnRetourner = new Button("Retourner");
+			vBoxCata.setSpacing(5);
 			
 			
-			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabCompt);
-			
+			vBoxCata.getChildren().addAll(btnEmprunter, btnRetourner);
+			hBoxCata.getChildren().addAll(tabPane, vBoxCata);
 			
 			HBox hBoxBtn = new HBox();
 			
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
-			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close();});
+			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); SerialisationCatalogue.serialiseCata();});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
@@ -315,7 +369,7 @@ public class Interface extends Application{
 			HBox.setMargin(btnFermer, new Insets(10));
 					
 			hBoxBtn.getChildren().addAll(btnQuit, btnFermer);
-			vBox2.getChildren().addAll(hBoxSearch, tabPane, hBoxBtn);
+			vBox2.getChildren().addAll(hBoxSearch, hBoxCata, hBoxBtn);
 			root2.setCenter(vBox2);
 			
 			

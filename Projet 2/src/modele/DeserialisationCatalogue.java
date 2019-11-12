@@ -7,17 +7,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
 
-public class DeserialisationCatalogue {
+import vue.Interface;
 
-	public static void main(String[] args) throws IOException {
+public class DeserialisationCatalogue extends Interface{
+
+	 static Catalogue cat;
+	
+	public static void deserialiseCata() throws IOException {
 		// TODO Auto-generated method stub
   // désérialiser le catalogue
-		
-		Livre book = new Livre("","",LocalDate.MIN,"","","");
-		DVD dvd = new DVD("","",LocalDate.MIN,"",0,"");
-		Periodique weekly = new Periodique("","",LocalDate.MIN,"",0,0);
-		Document doc = new Document("", "", LocalDate.MIN, "");
-		Catalogue cat;
+		System.out.println("deserial no work");
+//		Livre book = new Livre("","",LocalDate.MIN,"","","");
+//		DVD dvd = new DVD("","",LocalDate.MIN,"",0,"");
+//		Periodique weekly = new Periodique("","",LocalDate.MIN,"",0,0);
+//		Document doc = new Document("", "", LocalDate.MIN, "");
+		cat = Catalogue.getCatalogue();
 		
 		FileInputStream fichierL = new FileInputStream("catalogue.ser");
 		ObjectInputStream isL = new ObjectInputStream(fichierL);
@@ -25,7 +29,8 @@ public class DeserialisationCatalogue {
 		try {
 			while ((cat = (Catalogue) isL.readObject()) != null) {// erreur de fin de document 
 				System.out.println(cat);
-			System.out.println(cat.getLstDoc());
+				System.out.println(cat.getLstDoc());
+				System.out.println("désérialise");
 			}
 			isL.close();
 		
@@ -44,15 +49,18 @@ public class DeserialisationCatalogue {
 //				System.out.println(weekly);
 //			isP.close();
 			
-			
-			
 		} catch (FileNotFoundException e) {
-			
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (EOFException e) {
+			e.printStackTrace();
 		}
-		 	
-			
 	}
+	
+	public static Catalogue getDeseriaCata() {
+		return cat;
+	}
+	
+	
 }

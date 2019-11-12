@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class SerialisationCatalogue {
 
-	public static void main(String[] args) {
+	public static void serialiseCata() {
+	
 		//Sérialisation du catalogue
 		
 		Catalogue cat = Catalogue.getCatalogue();
@@ -27,7 +28,8 @@ public class SerialisationCatalogue {
 			FileOutputStream fichier = new FileOutputStream("catalogue.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);
 			
-				os.writeObject(cat);
+			System.out.println("Sérialise");
+			os.writeObject(cat);
 			
 			os.close();
 			
