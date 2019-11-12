@@ -17,13 +17,14 @@ public final class Catalogue implements Serializable {
   //	des fichiers textes Livres.txt et periodiques.txt et DVD.txt
 	
 	private static final long serialVersionUID = 1L;
-	private static Catalogue instance = getCatalogue();
+	private static Catalogue instance;
 	private ArrayList<Document> lstDocuments = new ArrayList<>();
 	private ArrayList<Livre> lstLivres = new ArrayList<>();
 	private ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
 	private ArrayList<DVD> lstDvd = new ArrayList<>();
 
-	private Catalogue() {
+	public Catalogue() {
+		
 		BufferedReader br = null;
 		StringTokenizer st;
 		Livre book;
@@ -84,6 +85,11 @@ public final class Catalogue implements Serializable {
 				lstPeriodiques.add(weekly);
 			} 
 			br.close();
+			
+			lstDocuments.addAll(lstDvd);
+			lstDocuments.addAll(lstLivres);
+			lstDocuments.addAll(lstPeriodiques);
+			
 		} catch (FileNotFoundException e) {
 			System.out.println("Ce fichier n'existe pas.");
 		} catch (IOException e) {
@@ -94,7 +100,6 @@ public final class Catalogue implements Serializable {
 	}
 	
 	public static Catalogue getCatalogue() {
-		System.out.println("getCata");
 		if (instance == null)
 			instance = new Catalogue();
 		return instance;

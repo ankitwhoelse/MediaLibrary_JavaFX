@@ -1,6 +1,7 @@
 package vue;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javafx.application.Application;
@@ -25,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -175,7 +177,7 @@ public class Interface extends Application{
 			HBox hBoxCata = new HBox();
 			
 			Catalogue cata = Catalogue.getCatalogue();
-			System.out.println(cata.getLstDoc());
+			cata = DeserialisationCatalogue.getDeseriaCata();
 			
 //				onglet documents
 			Tab tabDoc = new Tab();
@@ -190,18 +192,23 @@ public class Interface extends Application{
 			TableColumn<Document, String> colonneDispo1 = new TableColumn<Document, String> ("Disponible");
 			tableDoc.getColumns().addAll(colonneNum1, colonneTitre1, colonneParution1, colonneDispo1);
 			
-			System.out.println(cata.getLstDoc());
-			final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(cata.getLstDoc());
-			tableDoc.setItems(donneesDoc);
-			
+			ArrayList<Document> lstDocs = cata.getLstDoc();
+			System.out.println(lstDocs);
+			final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(lstDocs);
 			colonneNum1.setPrefWidth(120);
 			colonneNum1.setMaxWidth(120);
+			colonneNum1.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
 			colonneTitre1.setPrefWidth(120);
 			colonneTitre1.setMaxWidth(120);
+			colonneTitre1.setCellValueFactory(new PropertyValueFactory<>("titre"));
 			colonneParution1.setPrefWidth(120);
 			colonneParution1.setMaxWidth(120);
+			colonneParution1.setCellValueFactory(new PropertyValueFactory<>("dateParution"));
 			colonneDispo1.setPrefWidth(120);
 			colonneDispo1.setMaxWidth(120);
+			colonneDispo1.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+			tableDoc.setItems(donneesDoc);
+					
 			tabDoc.setContent(tableDoc);
 			
 			
@@ -220,18 +227,27 @@ public class Interface extends Application{
 			TableColumn<Document, String> colonneRealis = new TableColumn<Document, String> ("Réalisateur");
 			tableDvd.getColumns().addAll(colonneNum2, colonneTitre2, colonneParution2, colonneDispo2, colonneDisk, colonneRealis);
 			
+			final ObservableList<Document> donneesDvd = FXCollections.observableArrayList(cata.getLstDvd());
 			colonneNum2.setPrefWidth(120);
 			colonneNum2.setMaxWidth(120);
+			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
 			colonneTitre2.setPrefWidth(120);
 			colonneTitre2.setMaxWidth(120);
+			colonneTitre2.setCellValueFactory(new PropertyValueFactory<>("titre"));
 			colonneParution2.setPrefWidth(120);
 			colonneParution2.setMaxWidth(120);
+			colonneParution2.setCellValueFactory(new PropertyValueFactory<>("dateParution"));
 			colonneDispo2.setPrefWidth(120);
 			colonneDispo2.setMaxWidth(120);
+			colonneDispo2.setCellValueFactory(new PropertyValueFactory<>("disponible"));
 			colonneDisk.setPrefWidth(120);
 			colonneDisk.setMaxWidth(120);
+			colonneDisk.setCellValueFactory(new PropertyValueFactory<>("nbDisques"));
 			colonneRealis.setPrefWidth(120);
 			colonneRealis.setMaxWidth(120);
+			colonneRealis.setCellValueFactory(new PropertyValueFactory<>("strRealisateur"));
+			tableDvd.setItems(donneesDvd);
+			
 			tabDvd.setContent(tableDvd);
 			
 						
@@ -306,7 +322,7 @@ public class Interface extends Application{
 				VBox vBoxUtil = new VBox();
 			
 				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: ");
+				txtUtil.setText("Utilisateur: Admin");
 				VBox.setMargin(txtUtil, new Insets(10));
 				
 				vBoxUtil.getChildren().addAll(txtUtil);
@@ -321,7 +337,7 @@ public class Interface extends Application{
 				VBox vBoxUtil = new VBox();
 			
 				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: ");
+				txtUtil.setText("Utilisateur: ");	// ajoute + nom du prep
 				VBox.setMargin(txtUtil, new Insets(10));
 				
 				vBoxUtil.getChildren().addAll(txtUtil);
@@ -336,7 +352,7 @@ public class Interface extends Application{
 				VBox vBoxUtil = new VBox();
 			
 				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: ");
+				txtUtil.setText("Utilisateur: ");	// ajoute + nom du adherant
 				VBox.setMargin(txtUtil, new Insets(10));
 				
 				vBoxUtil.getChildren().addAll(txtUtil);
@@ -360,7 +376,8 @@ public class Interface extends Application{
 			
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
-			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); SerialisationCatalogue.serialiseCata();});
+			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); 
+				SerialisationCatalogue.serialiseCata();});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
