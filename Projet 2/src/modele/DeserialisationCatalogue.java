@@ -5,9 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-//import java.time.LocalDate;
-//
-//import vue.Interface;
 
 public class DeserialisationCatalogue{
 
@@ -15,11 +12,6 @@ public class DeserialisationCatalogue{
 	
 	public static void deserialiseCata() throws IOException {
 		// désérialiser le catalogue
-		
-//		Livre book = new Livre("","",LocalDate.MIN,"","","");
-//		DVD dvd = new DVD("","",LocalDate.MIN,"",0,"");
-//		Periodique weekly = new Periodique("","",LocalDate.MIN,"",0,0);
-//		Document doc = new Document("", "", LocalDate.MIN, "");
 		
 		FileInputStream fichier = new FileInputStream("catalogue.ser");
 		ObjectInputStream is = new ObjectInputStream(fichier);
@@ -29,21 +21,6 @@ public class DeserialisationCatalogue{
 			System.out.println("désérialise");
 		
 			is.close();
-		
-			
-//			FileInputStream fichierD = new FileInputStream("dvd.ser");
-//			ObjectInputStream isD = new ObjectInputStream(fichierD);
-//			
-//			while ((dvd = (DVD) isD.readObject()) != null) 
-//				System.out.println(dvd);
-//			isD.close();
-//			
-//			FileInputStream fichierP = new FileInputStream("periodique.ser");
-//			ObjectInputStream isP = new ObjectInputStream(fichierP);
-//			
-//			while ((weekly = (Periodique) isP.readObject()) != null) 
-//				System.out.println(weekly);
-//			isP.close();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -59,6 +36,5 @@ public class DeserialisationCatalogue{
 		deserialiseCata();
 		return cat;
 	}
-	
-	
+
 }

@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.ArrayList;
+
 public class Pret {
 
 	private String dateEmprunt; // jj/mm/aaaa
@@ -7,6 +9,8 @@ public class Pret {
 	private String noDoc;
 	private String dateRetour = ""; // même format que dateEmprunt
 	private double amende = 0;
+	
+	private static ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 	
 	public Pret(String dateEmprunt, String idAdherant, String noDoc) {
 		// TODO Auto-generated constructor stub
@@ -43,4 +47,7 @@ public class Pret {
 		return noDoc;
 	}
 
+	public static ArrayList<Pret> getLstPrets() {
+		return lstPrets;
+	}
 }
