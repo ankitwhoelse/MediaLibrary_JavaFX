@@ -1,4 +1,4 @@
-package application;
+package modele;
 
 public class Prepose extends Comptes {
 
