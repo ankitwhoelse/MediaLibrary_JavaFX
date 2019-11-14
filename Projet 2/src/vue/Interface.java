@@ -46,7 +46,11 @@ import modele.DVD;
 import modele.DeserialisationCatalogue;
 import modele.Document;
 import modele.Livre;
+<<<<<<< HEAD
 import modele.Prepose;
+=======
+import modele.Periodique;
+>>>>>>> 8b12f11e8fc22c86d4d542b3add26a4392994003
 import modele.Pret;
 import modele.SerialisationCatalogue;
 
@@ -202,14 +206,10 @@ public class Interface extends Application{
 			TableColumn<Document, String> colonneDispo1 = new TableColumn<Document, String> ("Disponible");
 			tableDoc.getColumns().addAll(colonneNum1, colonneTitre1, colonneParution1, colonneDispo1);
 			
-			colonneNum1.setPrefWidth(120);
-			colonneNum1.setMaxWidth(120);
-			colonneTitre1.setPrefWidth(120);
-			colonneTitre1.setMaxWidth(120);
-			colonneParution1.setPrefWidth(120);
-			colonneParution1.setMaxWidth(120);
-			colonneDispo1.setPrefWidth(120);
-			colonneDispo1.setMaxWidth(120);
+			colonneNum1.setPrefWidth(120);			colonneNum1.setMaxWidth(120);
+			colonneTitre1.setPrefWidth(120);			colonneTitre1.setMaxWidth(120);
+			colonneParution1.setPrefWidth(120);			colonneParution1.setMaxWidth(120);
+			colonneDispo1.setPrefWidth(120);			colonneDispo1.setMaxWidth(120);
 
 			ArrayList<Document> lstDocs = cata.getLstDoc();
 			final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(lstDocs);
@@ -237,18 +237,12 @@ public class Interface extends Application{
 			TableColumn<DVD, String> colonneRealis = new TableColumn<DVD, String> ("Réalisateur");
 			tableDvd.getColumns().addAll(colonneNum2, colonneTitre2, colonneParution2, colonneDispo2, colonneDisk, colonneRealis);
 			
-			colonneNum2.setPrefWidth(120);
-			colonneNum2.setMaxWidth(120);
-			colonneTitre2.setPrefWidth(120);
-			colonneTitre2.setMaxWidth(120);
-			colonneParution2.setPrefWidth(120);
-			colonneParution2.setMaxWidth(120);
-			colonneDispo2.setPrefWidth(120);
-			colonneDispo2.setMaxWidth(120);
-			colonneDisk.setPrefWidth(120);
-			colonneDisk.setMaxWidth(120);
-			colonneRealis.setPrefWidth(120);
-			colonneRealis.setMaxWidth(120);
+			colonneNum2.setPrefWidth(120);			colonneNum2.setMaxWidth(120);
+			colonneTitre2.setPrefWidth(120);			colonneTitre2.setMaxWidth(120);
+			colonneParution2.setPrefWidth(120);			colonneParution2.setMaxWidth(120);
+			colonneDispo2.setPrefWidth(120);			colonneDispo2.setMaxWidth(120);
+			colonneDisk.setPrefWidth(120);			colonneDisk.setMaxWidth(120);
+			colonneRealis.setPrefWidth(120);			colonneRealis.setMaxWidth(120);
 			
 			final ObservableList<DVD> donneesDvd = FXCollections.observableArrayList(cata.getLstDvd());
 			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
@@ -268,29 +262,30 @@ public class Interface extends Application{
 			tabLivre.setText("Livre");
 	//		tabDoc.setGraphic(new ImageView(new Image("icon-livre.png")));
 			
-			final TableView<Document> tableLivre = new TableView<Document>();
-			TableColumn<Document, String> colonneNum3 = new TableColumn<Document, String> ("Numéro");
-			TableColumn<Document, String> colonneTitre3 = new TableColumn<Document, String> ("Titre");
-			TableColumn<Document, LocalDate> colonneParution3 = new TableColumn<Document, LocalDate> ("Date de parution");
-			TableColumn<Document, String> colonneDispo3 = new TableColumn<Document, String> ("Disponible");
-			TableColumn<Document, Integer> colonneMCle = new TableColumn<Document, Integer> ("Mots clés");
-			TableColumn<Document, String> colonneAuteur = new TableColumn<Document, String> ("Auteur");
+			final TableView<Livre> tableLivre = new TableView<Livre>();
+			TableColumn<Livre, String> colonneNum3 = new TableColumn<Livre, String> ("Numéro");
+			TableColumn<Livre, String> colonneTitre3 = new TableColumn<Livre, String> ("Titre");
+			TableColumn<Livre, LocalDate> colonneParution3 = new TableColumn<Livre, LocalDate> ("Date de parution");
+			TableColumn<Livre, String> colonneDispo3 = new TableColumn<Livre, String> ("Disponible");
+			TableColumn<Livre, Integer> colonneMCle = new TableColumn<Livre, Integer> ("Mots clés");
+			TableColumn<Livre, String> colonneAuteur = new TableColumn<Livre, String> ("Auteur");
 			tableLivre.getColumns().addAll(colonneNum3, colonneTitre3, colonneParution3, colonneDispo3, colonneMCle, colonneAuteur);
 			
-			colonneNum3.setPrefWidth(120);
-			colonneNum3.setMaxWidth(120);
-			colonneTitre3.setPrefWidth(120);
-			colonneTitre3.setMaxWidth(120);
-			colonneParution3.setPrefWidth(120);
-			colonneParution3.setMaxWidth(120);
-			colonneDispo3.setPrefWidth(120);
-			colonneDispo3.setMaxWidth(120);
-			colonneMCle.setPrefWidth(120);
-			colonneMCle.setMaxWidth(120);
-			colonneAuteur.setPrefWidth(120);
-			colonneAuteur.setMaxWidth(120);
+			colonneNum3.setPrefWidth(120);			colonneNum3.setMaxWidth(120);
+			colonneTitre3.setPrefWidth(120);			colonneTitre3.setMaxWidth(120);
+			colonneParution3.setPrefWidth(120);			colonneParution3.setMaxWidth(120);
+			colonneDispo3.setPrefWidth(120);			colonneDispo3.setMaxWidth(120);
+			colonneMCle.setPrefWidth(120);			colonneMCle.setMaxWidth(120);
+			colonneAuteur.setPrefWidth(120);			colonneAuteur.setMaxWidth(120);
 			
 			final ObservableList<Livre> donneesLives = FXCollections.observableArrayList(cata.getLstLvr());
+			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
+			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
+			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
+			colonneDispo3.setCellValueFactory(new PropertyValueFactory<Livre, String>("disponible"));
+			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
+			colonneAuteur.setCellValueFactory(new PropertyValueFactory<Livre, String>("auteur"));
+			tableLivre.setItems(donneesLives);
 			
 			tabLivre.setContent(tableLivre);
 			
@@ -301,33 +296,40 @@ public class Interface extends Application{
 			tabPerio.setText("Périodique");
 	//		tabDoc.setGraphic(new ImageView(new Image("icon-livre.png")));
 			
-			final TableView<Document> tablePerio = new TableView<Document>();
-			TableColumn<Document, String> colonneNum4 = new TableColumn<Document, String> ("Numéro");
-			TableColumn<Document, String> colonneTitre4 = new TableColumn<Document, String> ("Titre");
-			TableColumn<Document, LocalDate> colonneParution4 = new TableColumn<Document, LocalDate> ("Date de parution");
-			TableColumn<Document, String> colonneDispo4 = new TableColumn<Document, String> ("Disponible");
-			TableColumn<Document, Integer> colonneVol = new TableColumn<Document, Integer> ("Numéro de volume");
-			TableColumn<Document, Integer> colonnePerio = new TableColumn<Document, Integer> ("Numéro de périodique");
+			final TableView<Periodique> tablePerio = new TableView<Periodique>();
+			TableColumn<Periodique, String> colonneNum4 = new TableColumn<Periodique, String> ("Numéro");
+			TableColumn<Periodique, String> colonneTitre4 = new TableColumn<Periodique, String> ("Titre");
+			TableColumn<Periodique, LocalDate> colonneParution4 = new TableColumn<Periodique, LocalDate> ("Date de parution");
+			TableColumn<Periodique, String> colonneDispo4 = new TableColumn<Periodique, String> ("Disponible");
+			TableColumn<Periodique, Integer> colonneVol = new TableColumn<Periodique, Integer> ("Numéro de volume");
+			TableColumn<Periodique, Integer> colonnePerio = new TableColumn<Periodique, Integer> ("Numéro de périodique");
 			tablePerio.getColumns().addAll(colonneNum4, colonneTitre4, colonneParution4, colonneDispo4, colonneVol, colonnePerio);
 			
-			colonneNum4.setPrefWidth(120);
-			colonneNum4.setMaxWidth(120);
-			colonneTitre4.setPrefWidth(120);
-			colonneTitre4.setMaxWidth(120);
-			colonneParution4.setPrefWidth(120);
-			colonneParution4.setMaxWidth(120);
-			colonneDispo4.setPrefWidth(120);
-			colonneDispo4.setMaxWidth(120);
-			colonneVol.setPrefWidth(120);
-			colonneVol.setMaxWidth(120);
-			colonnePerio.setPrefWidth(130);
-			colonnePerio.setMaxWidth(130);
+			colonneNum4.setPrefWidth(120);			colonneNum4.setMaxWidth(120);
+			colonneTitre4.setPrefWidth(120);			colonneTitre4.setMaxWidth(120);
+			colonneParution4.setPrefWidth(120);			colonneParution4.setMaxWidth(120);
+			colonneDispo4.setPrefWidth(120);			colonneDispo4.setMaxWidth(120);
+			colonneVol.setPrefWidth(120);			colonneVol.setMaxWidth(120);
+			colonnePerio.setPrefWidth(130);			colonnePerio.setMaxWidth(130);
+			
+			final ObservableList<Periodique> donneesPerio = FXCollections.observableArrayList(cata.getLstPer());
+			colonneNum4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("noDoc"));
+			colonneTitre4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("titre"));
+			colonneParution4.setCellValueFactory(new PropertyValueFactory<Periodique, LocalDate>("dateParution"));
+			colonneDispo4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("disponible"));
+			colonneVol.setCellValueFactory(new PropertyValueFactory<Periodique, Integer>("noVolume"));
+			colonnePerio.setCellValueFactory(new PropertyValueFactory<Periodique, Integer>("noPeriodique"));
+			tablePerio.setItems(donneesPerio);
+			
 			tabPerio.setContent(tablePerio);
 			
 			Tab tabUtil = new Tab();
 			Tab tabPrepo = new Tab();
 			Tab tabAdher = new Tab();
 			Tab tabPrets = new Tab();
+			
+			Comptes acc = new Comptes();
+			
 			
 			if (true) {			// if logged in comme admin	ou prepose
 			//			onglet utilisateurs
@@ -346,6 +348,14 @@ public class Interface extends Application{
 				TableColumn<Adherant, String> colonneAdresse = new TableColumn<Adherant, String>("Adresse");
 				tableUtilisateurs.getColumns().addAll(colonneId, colonneNom, colonnePrenom, colonneNumTel, colonneAdresse);
 				
+				final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(acc.getLstAdherant());
+				colonneId.setCellValueFactory(new PropertyValueFactory<Adherant, String> ("id"));
+				colonneNom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("nom"));
+				colonnePrenom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("prenom"));
+				colonneNumTel.setCellValueFactory(new PropertyValueFactory<Adherant, String>("numTelephone"));
+				colonneAdresse.setCellValueFactory(new PropertyValueFactory<Adherant, String>("adresse"));
+				tableUtilisateurs.setItems(donneesAdh);
+							
 				GridPane gbModifU = new GridPane();
 				gbModifU.setHgap(5);
 				gbModifU.setVgap(5);
@@ -394,16 +404,11 @@ public class Interface extends Application{
 					txtT = new Text("Téléphone");
 					tbT = new TextField();
 					
-					gpAddUser.add(txtId, 0, 0);
-					gpAddUser.add(tbID, 1, 0);
-					gpAddUser.add(txtP, 0, 1);
-					gpAddUser.add(tbP, 1, 1);
-					gpAddUser.add(txtN, 0, 2);
-					gpAddUser.add(tbN, 1, 2);
-					gpAddUser.add(txtA, 0, 3);
-					gpAddUser.add(tbA, 1, 3);
-					gpAddUser.add(txtT, 0, 4);
-					gpAddUser.add(tbT, 1, 4);
+					gpAddUser.add(txtId, 0, 0);					gpAddUser.add(tbID, 1, 0);
+					gpAddUser.add(txtP, 0, 1);					gpAddUser.add(tbP, 1, 1);
+					gpAddUser.add(txtN, 0, 2);					gpAddUser.add(tbN, 1, 2);
+					gpAddUser.add(txtA, 0, 3);					gpAddUser.add(tbA, 1, 3);
+					gpAddUser.add(txtT, 0, 4);					gpAddUser.add(tbT, 1, 4);
 					
 					HBox hBoxAjU2 = new HBox();
 					Button btnUserConfir = new Button("Confirmer");
@@ -435,11 +440,9 @@ public class Interface extends Application{
 				btnConfirmU.setDisable(true);
 				
 				gbModifU.add(txtModif1, 0, 0, 2, 1);
-				gbModifU.add(btnAjoutUtil, 0, 1, 1, 1);
-				gbModifU.add(btnSupprUtil, 1, 1, 1, 1);
+				gbModifU.add(btnAjoutUtil, 0, 1, 1, 1);				gbModifU.add(btnSupprUtil, 1, 1, 1, 1);
 				gbModifU.add(txtModif2, 0, 2, 2, 1);
-				gbModifU.add(rbModifAdr, 0, 3, 1, 1);
-				gbModifU.add(rbModifTel, 1, 3, 1, 1);
+				gbModifU.add(rbModifAdr, 0, 3, 1, 1);				gbModifU.add(rbModifTel, 1, 3, 1, 1);
 				gbModifU.add(tbModifU, 0, 4, 2, 1);
 				gbModifU.add(btnConfirmU, 0, 5, 2, 1);
 				
@@ -463,6 +466,15 @@ public class Interface extends Application{
 				TableColumn<Document, String> colonneNumDi = new TableColumn<Document, String>("Disponibilite");
 				tableCatalogue.getColumns().addAll(colonneNo, colonneTi, colonneDP, colonneNumDi);
 				
+				final ObservableList<Document> donneesCata = FXCollections.observableArrayList(cata.getLstDoc());
+				colonneNo.setCellValueFactory(new PropertyValueFactory<Document, String> ("noDoc"));
+				colonneTi.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
+				colonneDP.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
+				colonneNumDi.setCellValueFactory(new PropertyValueFactory<Document, String>("disponible"));
+				tableCatalogue.setItems(donneesCata);
+				
+				
+				
 				GridPane gbModifC = new GridPane();
 				gbModifC.setHgap(5);
 				gbModifC.setVgap(5);
@@ -472,8 +484,7 @@ public class Interface extends Application{
 				Button btnSupprCata = new Button("Supprimer");
 				
 				gbModifC.add(txtModif2, 0, 0, 2, 1);
-				gbModifC.add(btnAjoutCata, 0, 1, 1, 1);
-				gbModifC.add(btnSupprCata, 1, 1, 1, 1);
+				gbModifC.add(btnAjoutCata, 0, 1, 1, 1);				gbModifC.add(btnSupprCata, 1, 1, 1, 1);
 				
 				hBoxCatal.getChildren().addAll(tableCatalogue, gbModifC);
 				tabPrepo.setContent(hBoxCatal);
@@ -515,16 +526,11 @@ public class Interface extends Application{
 					GridPane gpAj = new GridPane();
 					gpAj.setHgap(5);
 					gpAj.setVgap(5);
-					gpAj.add(txtAjTitr, 0, 0);
-					gpAj.add(tbAjTitr, 1, 0);
-					gpAj.add(txtAjDate, 0, 1);
-					gpAj.add(tbAjDate, 1, 1);
-					gpAj.add(txtAjMC, 0, 2);
-					gpAj.add(tbAjMC, 1, 2);
-					gpAj.add(txtAj2, 0, 3);
-					gpAj.add(tbAj2, 1, 3);
-					gpAj.add(txtAj3, 0, 4);
-					gpAj.add(tbAj3, 1, 4);
+					gpAj.add(txtAjTitr, 0, 0);					gpAj.add(tbAjTitr, 1, 0);
+					gpAj.add(txtAjDate, 0, 1);					gpAj.add(tbAjDate, 1, 1);
+					gpAj.add(txtAjMC, 0, 2);					gpAj.add(tbAjMC, 1, 2);
+					gpAj.add(txtAj2, 0, 3);					gpAj.add(tbAj2, 1, 3);
+					gpAj.add(txtAj3, 0, 4);					gpAj.add(tbAj3, 1, 4);
 					
 					HBox hBoxAj1 = new HBox();
 					hBoxAj1.getChildren().addAll(rbAjoutL, rbAjoutD, rbAjoutP);	
@@ -574,25 +580,20 @@ public class Interface extends Application{
 				TableColumn<Pret, Number> colonneAmende = new TableColumn<Pret, Number> ("Amende");
 				tablePrets.getColumns().addAll(colonneEmpr, colonneEmprID, colonneNum5, colonneRetour,colonneAmende);
 				
-				colonneEmpr.setPrefWidth(120);
-				colonneEmpr.setMaxWidth(120);
-				colonneEmprID.setPrefWidth(120);
-				colonneEmprID.setMaxWidth(120);
-				colonneNum5.setPrefWidth(120);
-				colonneNum5.setMaxWidth(120);
-				colonneRetour.setPrefWidth(120);
-				colonneRetour.setMaxWidth(120);
-				colonneAmende.setPrefWidth(120);
-				colonneAmende.setMaxWidth(120);
+				colonneEmpr.setPrefWidth(120);				colonneEmpr.setMaxWidth(120);
+				colonneEmprID.setPrefWidth(120);				colonneEmprID.setMaxWidth(120);
+				colonneNum5.setPrefWidth(120);				colonneNum5.setMaxWidth(120);
+				colonneRetour.setPrefWidth(120);				colonneRetour.setMaxWidth(120);
+				colonneAmende.setPrefWidth(120);				colonneAmende.setMaxWidth(120);
 
-				ArrayList<Pret> lstPrets = Pret.getLstPrets();
-				final ObservableList<Pret> donneesPrets = FXCollections.observableArrayList(lstPrets);
+				final ObservableList<Pret> donneesPrets = FXCollections.observableArrayList(Pret.getLstPrets());
 				colonneEmpr.setCellValueFactory(new PropertyValueFactory<Pret, String>("dateEmprunt"));
 				colonneEmprID.setCellValueFactory(new PropertyValueFactory<Pret, String>("idAdherant"));
 				colonneNum5.setCellValueFactory(new PropertyValueFactory<Pret, String>("noDoc"));
 				colonneRetour.setCellValueFactory(new PropertyValueFactory<Pret, String>("dateRetour"));
 				colonneAmende.setCellValueFactory(new PropertyValueFactory<Pret, Number>("amende"));
 				tablePrets.setItems(donneesPrets);
+				
 				
 				GridPane gpEmpr = new GridPane();
 				GridPane.setMargin(gpEmpr, new Insets(15));
@@ -611,11 +612,9 @@ public class Interface extends Application{
 				tbEmprDocID.setMaxWidth(50);
 				tbEmprDocID.setPrefWidth(50);
 
-				gpEmpr.add(txtEmprID, 0, 0);
-				gpEmpr.add(tbEmprID, 1, 0);
-				gpEmpr.add(txtEmprDocID, 0, 1);
-				gpEmpr.add(tbEmprDocID, 1, 1);
-				gpEmpr.add(btnEmprunter, 0, 3);
+				gpEmpr.add(txtEmprID, 0, 0);				gpEmpr.add(tbEmprID, 1, 0);
+				gpEmpr.add(txtEmprDocID, 0, 1);				gpEmpr.add(tbEmprDocID, 1, 1);
+				gpEmpr.add(btnEmprunter, 0, 3);				
 				gpEmpr.add(btnRetourner, 0, 4);
 				gpEmpr.add(btnPayer, 0, 5);
 				
@@ -656,8 +655,6 @@ public class Interface extends Application{
 		public void handle(ActionEvent e) {
 			if (e.getSource() == btnCons) {
 				//	IDENTIFICATION CAS OÙ LES CASES SONT VIDES
-				System.out.println(txtPrenom.getText());
-				System.out.println(txtNom.getText());
 				
 				if ( txtNom.getLength()==0 && txtPrenom.getLength()==0 && txtTel.getLength()==0) {
 					Optional<ButtonType> retour = afficherBoiteInfo(0);

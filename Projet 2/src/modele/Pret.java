@@ -18,6 +18,10 @@ public class Pret {
 		this.idAdherant = idAdherant;
 		this.noDoc = noDoc;
 	}
+	
+	public Pret() {
+		
+	}
 
 	public String getDateRetour() {
 		return dateRetour;

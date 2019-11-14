@@ -23,4 +23,12 @@ private String auteur;
 		return "Livre [" +  super.toString()+ "auteur="  +auteur + "]";
 	}
 
+	public String getAuteur() {
+		return auteur;
+	}
+
+	public void setAuteur(String auteur) {
+		this.auteur = auteur;
+	}
+
 }
