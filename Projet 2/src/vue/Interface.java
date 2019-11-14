@@ -46,13 +46,14 @@ import modele.DVD;
 import modele.DeserialisationCatalogue;
 import modele.Document;
 import modele.Livre;
+import modele.Prepose;
 import modele.Pret;
 import modele.SerialisationCatalogue;
 
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU;
+	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnSeConnecter;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID;
 	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT;
@@ -643,7 +644,7 @@ public class Interface extends Application{
 				
 			
 //					< / INTERFACE DE CATALOGUE >
-//
+//			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -744,7 +745,10 @@ public class Interface extends Application{
 				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
 			}
 	
-			
+//				BOUTON SE CONNECTER ADHERANT DANS CATALOGUE
+			if(e.getSource() == btnSeConnecter) {
+				
+			}
 			
 			
 			
@@ -805,6 +809,33 @@ public class Interface extends Application{
 		
 		return alert.showAndWait();
 	}
+	
+	public boolean connectedAdmin(String strID, String strMotDePasse) {
+		boolean ok;
+		if((strID.compareTo("admin") == 0) && (strMotDePasse.compareTo("admin") == 0)) {
+			ok = true;
+		}
+		else {
+			ok = false;
+		}
+		return ok;
+	}
+	
+	public boolean connectedPrepose(String ID, String strMotDePasse) {
+		Comptes comptes = new Comptes(ID);
+		boolean ok = false;
+		
+		for(Prepose prep: comptes.getLstPrepose()) {
+			if((ID.compareTo(prep.getId()) == 0) && (strMotDePasse.compareTo(prep.getMotDePasse()) == 0)) {
+				ok = true;
+			}
+		}
+		
+		return ok;
+		
+	}
+	
+	
 	
 
 }	// FIN DE LA CLASSE
