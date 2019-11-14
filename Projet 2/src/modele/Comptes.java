@@ -14,6 +14,10 @@ public class Comptes {
 		// TODO Auto-generated constructor stub
 		this.setId(id);
 	}
+	
+	public Comptes() {
+//		test
+	}
 
 	public String getId() {
 		return id;

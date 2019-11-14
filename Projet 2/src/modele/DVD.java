@@ -20,4 +20,20 @@ public class DVD extends Document{
 	public String toString() {
 		return " DVD :" + super.toString()+ "nbDisques: " +this.nbDisques+ " Réalisateur: "+ this.strRealisateur; 
 	}
+
+	public int getNbDisques() {
+		return nbDisques;
+	}
+
+	public void setNbDisques(int nbDisques) {
+		this.nbDisques = nbDisques;
+	}
+
+	public String getStrRealisateur() {
+		return strRealisateur;
+	}
+
+	public void setStrRealisateur(String strRealisateur) {
+		this.strRealisateur = strRealisateur;
+	}
 }

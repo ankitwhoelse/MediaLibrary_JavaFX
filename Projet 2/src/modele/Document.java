@@ -24,6 +24,38 @@ public class Document implements Serializable{
 		return "noDoc=" + noDoc + ", titre=" + titre + ", dateParution=" + dateParution + ", disponible="
 				+ disponible ;
 	}
+
+	public String getNoDoc() {
+		return noDoc;
+	}
+
+	public void setNoDoc(String noDoc) {
+		this.noDoc = noDoc;
+	}
+
+	public String getTitre() {
+		return titre;
+	}
+
+	public void setTitre(String titre) {
+		this.titre = titre;
+	}
+
+	public LocalDate getDateParution() {
+		return dateParution;
+	}
+
+	public void setDateParution(LocalDate dateParution) {
+		this.dateParution = dateParution;
+	}
+
+	public String getDisponible() {
+		return disponible;
+	}
+
+	public void setDisponible(String disponible) {
+		this.disponible = disponible;
+	}
 	
 	
 	

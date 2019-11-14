@@ -2,9 +2,19 @@ package modele;
 
 public class Prepose extends Comptes {
 
-	public Prepose(String id) {
+	private String strMdP;
+	
+	public String getStrMdP() {
+		return strMdP;
+	}
+
+	public void setStrMdP(String strMdP) {
+		this.strMdP = strMdP;
+	}
+
+	public Prepose(String id, String strMdP) {
 		super(id);
-		// TODO Auto-generated constructor stub
+		this.strMdP = strMdP;
 	}
 
 }

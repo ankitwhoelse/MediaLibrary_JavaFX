@@ -25,5 +25,21 @@ public class Periodique extends Document {
 		return "Periodique [" + super.toString()+ "noVolume=" + noVolume + ", noPeriodique=" + noPeriodique +  "]";
 	}
 
+	public int getNoVolume() {
+		return noVolume;
+	}
+
+	public void setNoVolume(int noVolume) {
+		this.noVolume = noVolume;
+	}
+
+	public int getNoPeriodique() {
+		return noPeriodique;
+	}
+
+	public void setNoPeriodique(int noPeriodique) {
+		this.noPeriodique = noPeriodique;
+	}
+
 	
 }
