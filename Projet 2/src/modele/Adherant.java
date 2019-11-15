@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
-public class Adherant extends Comptes {
+public class Adherant {
 	private String numTelephone;
 	private String nom;
 	private String prenom;
@@ -36,8 +36,7 @@ public class Adherant extends Comptes {
 		return lstPrets;
 	}
 
-	public Adherant(String id, String numTelephone, String nom, String prenom, String adresse) {
-		super(id);
+	public Adherant(String numTelephone, String nom, String prenom, String adresse) {
 		// TODO Auto-generated constructor stub
 		this.numTelephone = numTelephone;
 		this.nom = nom;

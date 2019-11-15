@@ -619,7 +619,7 @@ public class Interface extends Application{
 				tabPrets.setContent(hBoxPret);
 			}
 			
-			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabAdher, tabPrets, tabUtil, tabPrepo);
+			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabAdher, tabPrets, tabPrepo, tabUtil);
 
 			HBox hBoxBtn = new HBox();
 			
@@ -854,8 +854,8 @@ public class Interface extends Application{
 	}
 	
 	public boolean connectedPrepose(String ID, String strMotDePasse) {
-		Comptes comptes = new Comptes(ID);
-		boolean ok = false;
+		Comptes comptes = new Comptes();
+		boolean ok = false; 
 		
 		for(Prepose prep: comptes.getLstPrepose()) {
 			if((ID.compareTo(prep.getId()) == 0) && (strMotDePasse.compareTo(prep.getMotDePasse()) == 0)) {
@@ -867,7 +867,7 @@ public class Interface extends Application{
 	}
 	
 	public boolean connectedAdherant(String nom, String prenom, String tel) {
-		Comptes comptes = new Comptes("");
+		Comptes comptes = new Comptes();
 		boolean ok = false;
 		
 		for(Adherant adher: comptes.getLstAdherant()) {
