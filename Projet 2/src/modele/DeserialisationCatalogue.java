@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 public class DeserialisationCatalogue{
 
 	static Catalogue cat;
-	static Utilisateurs users;
 	
 	public static void deserialiseCata() throws IOException {
 		// désérialiser le catalogue
@@ -38,32 +37,5 @@ public class DeserialisationCatalogue{
 		return cat;
 	}
 
-	
-	public static void deserialiseUsers() throws IOException {
-		// désérialiser les utilisateurs
-		
-		FileInputStream fichier = new FileInputStream("users.ser");
-		ObjectInputStream is = new ObjectInputStream(fichier);
-		
-		try {
-			users = (Utilisateurs) is.readObject();
-			System.out.println("désérialise users");
-		
-			is.close();
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (EOFException e) {
-			System.out.println("erreur de fin du fichier");
-			e.printStackTrace();
-		}
-	}
-	
-	public static Utilisateurs getDeseriaUsers() throws IOException {
-		deserialiseUsers();
-		return users;
-	}
 	
 }

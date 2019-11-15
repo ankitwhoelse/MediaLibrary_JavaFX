@@ -26,27 +26,4 @@ public class SerialisationCatalogue {
 
 	}
 
-	public static void serialiseUtil() {
-		//Sérialisation du catalogue
-		
-		Utilisateurs users = Utilisateurs.getUtilisateurs();
-	
-		try {
-			FileOutputStream fichier = new FileOutputStream("users.ser");
-			ObjectOutputStream os = new ObjectOutputStream(fichier);
-			
-			System.out.println("Utilisateurs sérialisation");
-			os.writeObject(users);
-			
-			os.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-	
-//	public static void main(String[] args) {
-//		serialiseUtil();
-//	}
 }

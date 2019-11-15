@@ -1,19 +1,25 @@
 package modele;
 
+import java.io.Serializable;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
-public class Adherant extends Comptes{
+public class Adherant extends Adherants implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String numTelephone;
+	private String strId;
+	private String numTelephone;// FORMAT: (000) 000-0000
 	private String nom;
 	private String prenom;
 	private String adresse;
 	private ObservableList<Pret> Prets = FXCollections.observableArrayList();
 	private ListView<Pret> lstPrets = new ListView<>(Prets);
 
+	public String getStrId() {
+		return strId;
+	}
 	public String getNumTelephone() {
 		return numTelephone;
 	}
@@ -38,12 +44,13 @@ public class Adherant extends Comptes{
 		return lstPrets;
 	}
 
-	public Adherant(String numTelephone, String nom, String prenom, String adresse) {
-		// TODO Auto-generated constructor stub
+	public Adherant(String strId, String numTelephone, String nom, String prenom, String adresse) {
+		this.strId = strId;
 		this.numTelephone = numTelephone;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.adresse = adresse;
 	}
+
 
 }

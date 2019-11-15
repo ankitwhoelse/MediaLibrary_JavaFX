@@ -1,31 +1,25 @@
 package modele;
 
-public class Prepose extends Comptes{
+import java.io.Serializable;
+
+public class Prepose extends Preposes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String id;
+	private String strId;
 	private String MotDePasse;
 	
-	public Prepose(String id, String MotDePasse) {
-		// TODO Auto-generated constructor stub
-		this.setId(id);
-		this.setMotDePasse(MotDePasse);
+	public Prepose(String strId, String MotDePasse) {
+		this.strId = strId;
+		this.MotDePasse = MotDePasse;
 	}
 
 	public String getMotDePasse() {
 		return MotDePasse;
 	}
 
-	public void setMotDePasse(String motDePasse) {
-		MotDePasse = motDePasse;
-	}
-
 	public String getId() {
-		return id;
+		return strId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 }
