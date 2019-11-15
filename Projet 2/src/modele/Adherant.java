@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
 public class Adherant {
-	private String numTelephone;
+	private String numTelephone;		// FORMAT: (000) 000-0000
 	private String nom;
 	private String prenom;
 	private String adresse;

@@ -346,11 +346,11 @@ public class Interface extends Application{
 			if (true) {			// if logged in comme admin	ou prepose
 			//			onglet utilisateurs
 				tabUtil.setClosable(false);
-				tabUtil.setText("Utilisateurs");
+				tabUtil.setText("Adhérants");
 				
-				HBox hBoxUtil = new HBox();
-				hBoxUtil.setSpacing(20);
-				hBoxUtil.setPadding(new Insets(10));
+				HBox hBoxAdher = new HBox();
+				hBoxAdher.setSpacing(20);
+				hBoxAdher.setPadding(new Insets(10));
 								
 				final TableView<Adherant> tableUtilisateurs = new TableView<Adherant>();
 				TableColumn<Adherant, String> colonneId = new TableColumn<Adherant, String> ("ID");
@@ -388,18 +388,18 @@ public class Interface extends Application{
 					VBox.setMargin(vBoxAjU1, new Insets(20));
 					vBoxAjU1.setPadding(new Insets(10));
 					
-					Text txtAjU1 = new Text("Type de utilisateur");
-					ToggleGroup tgAjoutCata = new ToggleGroup();
-					rbAjoutAdh = new RadioButton("Adhérant");
-					rbAjoutAdh.setOnAction(gc);
-					rbAjoutAdh.setSelected(true);
-					rbAjoutPre = new RadioButton("Préposé");
-					rbAjoutPre.setOnAction(gc);
-					tgAjoutCata.getToggles().addAll(rbAjoutAdh,rbAjoutPre);
+					Text txtAjU1 = new Text("Informations de l'adhérant");
+//					ToggleGroup tgAjoutCata = new ToggleGroup();
+//					rbAjoutAdh = new RadioButton("Adhérant");
+//					rbAjoutAdh.setOnAction(gc);
+//					rbAjoutAdh.setSelected(true);
+//					rbAjoutPre = new RadioButton("Préposé");
+//					rbAjoutPre.setOnAction(gc);
+//					tgAjoutCata.getToggles().addAll(rbAjoutAdh,rbAjoutPre);
 					
-					HBox hBoxAjU1 = new HBox();
-					hBoxAjU1.getChildren().addAll(rbAjoutAdh, rbAjoutPre);
-					hBoxAjU1.setSpacing(25);
+//					HBox hBoxAjU1 = new HBox();
+//					hBoxAjU1.getChildren().addAll(rbAjoutAdh, rbAjoutPre);
+//					hBoxAjU1.setSpacing(25);
 					
 					GridPane gpAddUser = new GridPane();
 					gpAddUser.setHgap(5);
@@ -425,19 +425,33 @@ public class Interface extends Application{
 					HBox hBoxAjU2 = new HBox();
 					Button btnUserConfir = new Button("Confirmer");
 					btnUserConfir.setOnAction(e -> {
-						if (tbN.getText().length()==0 || tbP.getText().length()==0 ||
+						if (tbN.getText().trim().length()==0 || tbP.getText().trim().length()==0 ||
 							tbA.getText().length()==0 || tbT.getText().length()==0) {
-						Optional<ButtonType> retour = afficherBoiteInfo(8);
-//						else {
-//							
-//						}
-						}});
+							Optional<ButtonType> retour = afficherBoiteInfo(8);
+						} 
+						else {
+							String nom = tbN.getText().trim();
+							String prenom = tbP.getText().trim();
+							String adresse = tbA.getText().trim();
+							String telephone = tbT.getText().trim();
+							Adherant adher = new Adherant(telephone, nom, prenom, adresse);
+							Comptes compte = new Comptes();
+							compte.addLstAdherant(adher);
+							Optional<ButtonType> retour = afficherBoiteInfo(13);
+							tbID.clear();
+							tbP.clear();
+							tbN.clear();
+							tbA.clear();
+							tbT.clear();
+							stage4.close();
+						}
+					});
 					
 					Button btnUserQuit = new Button("Annuler");
 					btnUserQuit.setOnAction(e -> stage4.close());
 					hBoxAjU2.getChildren().addAll(btnUserConfir, btnUserQuit);
 					hBoxAjU2.setSpacing(15);
-					vBoxAjU1.getChildren().addAll(txtAjU1, hBoxAjU1, gpAddUser, hBoxAjU2);
+					vBoxAjU1.getChildren().addAll(txtAjU1,/* hBoxAjU1,*/ gpAddUser, hBoxAjU2);
 					vBoxAjU1.setSpacing(10);
 					
 					scene4 = new Scene(vBoxAjU1, 350, 250);
@@ -458,8 +472,8 @@ public class Interface extends Application{
 				gbModifU.add(tbModifU, 0, 4, 2, 1);
 				gbModifU.add(btnConfirmU, 0, 5, 2, 1);
 				
-				hBoxUtil.getChildren().addAll(tableUtilisateurs, gbModifU);
-				tabUtil.setContent(hBoxUtil);
+				hBoxAdher.getChildren().addAll(tableUtilisateurs, gbModifU);
+				tabUtil.setContent(hBoxAdher);
 			}
 			
 			if (true) {			// if logged in comme preposé
@@ -653,7 +667,7 @@ public class Interface extends Application{
 			if (e.getSource() == btnCons) {
 				//	IDENTIFICATION CAS OÙ LES CASES SONT VIDES
 				
-				if ( txtNom.getLength()==0 && txtPrenom.getLength()==0 && txtTel.getLength()==0) {
+				if ( txtNom.getText().trim().length()==0 && txtPrenom.getText().trim().length()==0 && txtTel.getText().trim().length()==0) {
 					Optional<ButtonType> retour = afficherBoiteInfo(0);
 					txtNom.requestFocus();
 				} else if (txtNom.getText().trim().length()!=0 && txtPrenom.getText().trim().length()!=0 && cbConn.isSelected()) {
@@ -677,25 +691,25 @@ public class Interface extends Application{
 						Optional<ButtonType> retour = afficherBoiteInfo(12);
 						txtNom.requestFocus();
 					}
-				} else if (txtTel.getLength()!=10 && (txtNom.getText().trim().length()==0 && txtPrenom.getText().trim().length()==0)) {
+				} else if (txtTel.getLength()!=14 && (txtNom.getText().trim().length()==0 && txtPrenom.getText().trim().length()==0)) {
 					Optional<ButtonType> retour = afficherBoiteInfo(1);
 					txtTel.requestFocus();
 //					CAS OÙ CONNECTION EST BONNE
-				} else if ((txtNom.getLength()!=0 && txtPrenom.getLength()!=0) && txtTel.getLength()==10 && !cbConn.isSelected()) {
-					if(connectedAdherant(txtNom.getText().trim(), txtPrenom.getText().trim(), txtTel.getText().trim())) {
-						Optional<ButtonType> retour = afficherBoiteInfo(9);
-						tabAdher.setDisable(false);			// Lorsqu'il est connecté l'adhérant
-						tabPrepo.setDisable(true);			// ne peut accèder qu'aux informations
-						tabPrets.setDisable(true);			// de son compte et au catalogue
-						tabUtil.setDisable(true);
-						stage2.showAndWait();
-					}
-					else {
-						Optional<ButtonType> retour = afficherBoiteInfo(12);
-						txtNom.requestFocus();
-					}
-				} 
-			}
+					} else if ((txtNom.getLength()!=0 && txtPrenom.getLength()!=0) && txtTel.getLength()==14 && !cbConn.isSelected()) {
+						if(connectedAdherant(txtNom.getText().trim(), txtPrenom.getText().trim(), txtTel.getText().trim())) {
+							Optional<ButtonType> retour = afficherBoiteInfo(9);
+							tabAdher.setDisable(false);			// Lorsqu'il est connecté l'adhérant
+							tabPrepo.setDisable(true);			// ne peut accèder qu'aux informations
+							tabPrets.setDisable(true);			// de son compte et au catalogue
+							tabUtil.setDisable(true);
+							stage2.showAndWait();
+						}
+						else {
+							Optional<ButtonType> retour = afficherBoiteInfo(12);
+							txtNom.requestFocus();
+						}
+					} 
+				}
 			
 //				BOUTON CONSULTER LA MÉDIATHÈQUE
 			if (e.getSource() == btnBiblio) {
@@ -734,16 +748,16 @@ public class Interface extends Application{
 				stage4.showAndWait();
 			}
 		
-//				ENSEMBLE DE RADIO BUTTONS DE AJOUT DE UTILISATEURS
-			if (rbAjoutAdh.isSelected()) {
-				txtP.setText("Prénom"); tbID.setDisable(true);
-				tbN.setVisible(true); tbA.setVisible(true); tbT.setVisible(true);
-				txtN.setVisible(true); txtA.setVisible(true); txtT.setVisible(true);
-			} else if (rbAjoutPre.isSelected()) {
-				txtP.setText("Mot de passe"); tbID.setDisable(false);
-				tbN.setVisible(false); tbA.setVisible(false); tbT.setVisible(false);
-				txtN.setVisible(false); txtA.setVisible(false); txtT.setVisible(false);
-			}
+////				ENSEMBLE DE RADIO BUTTONS DE AJOUT DE UTILISATEURS
+//			if (rbAjoutAdh.isSelected()) {
+//				txtP.setText("Prénom"); tbID.setDisable(true);
+//				tbN.setVisible(true); tbA.setVisible(true); tbT.setVisible(true);
+//				txtN.setVisible(true); txtA.setVisible(true); txtT.setVisible(true);
+//			} else if (rbAjoutPre.isSelected()) {
+//				txtP.setText("Mot de passe"); tbID.setDisable(false);
+//				tbN.setVisible(false); tbA.setVisible(false); tbT.setVisible(false);
+//				txtN.setVisible(false); txtA.setVisible(false); txtT.setVisible(false);
+//			}
 			
 //				ENSEMBLE DE RADIO BUTTON DE MODIFICATION DES INFORMATIONS DES UTILISATEURS
 			if (rbModifAdr.isSelected()) {
@@ -833,6 +847,18 @@ public class Interface extends Application{
 			alert.setTitle("Connexion impossible");
 			alert.setHeaderText("");
 			alert.setContentText("La connexion n'a pu être faite. Assurez-vous que les informations que vous rentrez correspondent à celles de votre compte");
+			break;
+		case 13:
+			alert=new Alert(AlertType.INFORMATION);
+			alert.setTitle("Enregistré");
+			alert.setHeaderText("");
+			alert.setContentText("L'Adhérant a été correctement ajouté");
+			break;
+		case 14:
+			alert=new Alert(AlertType.INFORMATION);
+			alert.setTitle("Enregistré");
+			alert.setHeaderText("");
+			alert.setContentText("Le préposé a été correctement ajouté");
 			break;
 		
 		default:
