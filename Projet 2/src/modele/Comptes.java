@@ -38,5 +38,17 @@ public class Comptes {
 	public ArrayList<Comptes> getLstComptes() {
 		return lstComptes;
 	}
+
+	public void addLstAdherant(Adherant adher) {
+		lstAdherant.add(adher);
+	}
+
+	public void addLstPrepose(Prepose prep) {
+		lstPrepose.add(prep);
+	}
+
+	public void setLstComptes(ArrayList<Comptes> lstComptes) {
+		this.lstComptes = lstComptes;
+	}
 	
 }
