@@ -4,7 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
-public class Adherant {
+public class Adherant extends Comptes{
+
+	private static final long serialVersionUID = 1L;
 	private String numTelephone;
 	private String nom;
 	private String prenom;

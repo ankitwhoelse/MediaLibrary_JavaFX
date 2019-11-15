@@ -1,7 +1,8 @@
 package modele;
 
-public class Prepose extends Comptes {
+public class Prepose extends Comptes{
 
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String MotDePasse;
 	

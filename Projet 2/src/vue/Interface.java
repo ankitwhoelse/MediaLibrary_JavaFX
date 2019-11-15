@@ -46,15 +46,15 @@ import modele.DVD;
 import modele.DeserialisationCatalogue;
 import modele.Document;
 import modele.Livre;
-import modele.Prepose;
 import modele.Periodique;
 import modele.Pret;
 import modele.SerialisationCatalogue;
+import modele.Utilisateurs;
 
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnSeConnecter;
+	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID;
 	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT;
@@ -63,8 +63,6 @@ public class Interface extends Application{
 	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre;
 	Scene scene, scene2, scene3, scene4;
 	Stage stage2, stage3, stage4;
-	Tab tabAdher, tabPrets, tabPrepo, tabUtil;
-	int Connexion = 0;
 
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
@@ -191,6 +189,8 @@ public class Interface extends Application{
 			
 			Catalogue cata = Catalogue.getCatalogue();
 			cata = DeserialisationCatalogue.getDeseriaCata();
+			Utilisateurs users = Utilisateurs.getUtilisateurs();
+			users = DeserialisationCatalogue.getDeseriaUsers();
 			
 //				onglet documents
 			Tab tabDoc = new Tab();
@@ -322,27 +322,14 @@ public class Interface extends Application{
 			
 			tabPerio.setContent(tablePerio);
 			
-			tabUtil = new Tab();
-			tabPrepo = new Tab();
-			tabAdher = new Tab();
-			tabPrets = new Tab();
+			Tab tabUtil = new Tab();
+			Tab tabPrepo = new Tab();
+			Tab tabAdher = new Tab();
+			Tab tabPrets = new Tab();
 			
 			Comptes acc = new Comptes();
 			
-			if (true) {			// if logged in comme adher	
-			//			onglet compte
-				tabAdher.setClosable(false);
-				tabAdher.setText("Compte");
-				
-				VBox vBoxUtil = new VBox();
 			
-				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: ");	// ajoute + nom du adherant
-				VBox.setMargin(txtUtil, new Insets(10));
-				
-				vBoxUtil.getChildren().addAll(txtUtil);
-				tabAdher.setContent(vBoxUtil);
-			}
 			if (true) {			// if logged in comme admin	ou prepose
 			//			onglet utilisateurs
 				tabUtil.setClosable(false);
@@ -360,7 +347,7 @@ public class Interface extends Application{
 				TableColumn<Adherant, String> colonneAdresse = new TableColumn<Adherant, String>("Adresse");
 				tableUtilisateurs.getColumns().addAll(colonneId, colonneNom, colonnePrenom, colonneNumTel, colonneAdresse);
 				
-				final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(acc.getLstAdherant());
+				final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(users.getLstAdherant());
 				colonneId.setCellValueFactory(new PropertyValueFactory<Adherant, String> ("id"));
 				colonneNom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("nom"));
 				colonnePrenom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("prenom"));
@@ -465,7 +452,7 @@ public class Interface extends Application{
 			if (true) {			// if logged in comme preposé
 			//			onglet catalogue
 				tabPrepo.setClosable(false);
-				tabPrepo.setText("Catalogue");
+				tabPrepo.setText("Catalolgue");
 				
 				HBox hBoxCatal = new HBox();
 				hBoxCatal.setSpacing(20);
@@ -560,6 +547,21 @@ public class Interface extends Application{
 					stage3.setTitle("Ajouter un document");
 					stage3.initModality(Modality.APPLICATION_MODAL);
 			
+			if (true) {			// if logged in comme adher	
+			//			onglet compte
+				tabAdher.setClosable(false);
+				tabAdher.setText("Compte");
+				
+				VBox vBoxUtil = new VBox();
+			
+				Text txtUtil = new Text();
+				txtUtil.setText("Utilisateur: ");	// ajoute + nom du adherant
+				VBox.setMargin(txtUtil, new Insets(10));
+				
+				vBoxUtil.getChildren().addAll(txtUtil);
+				tabAdher.setContent(vBoxUtil);
+			}
+			
 			if (true) {			// if logged in comme prep/admin
 			//		onglet prêts
 				HBox hBoxPret = new HBox();
@@ -619,14 +621,14 @@ public class Interface extends Application{
 				tabPrets.setContent(hBoxPret);
 			}
 			
-			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabAdher, tabPrets, tabPrepo, tabUtil);
-
+			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabPrets, tabUtil, tabPrepo, tabAdher);
+			
 			HBox hBoxBtn = new HBox();
 			
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
 			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); 
-				SerialisationCatalogue.serialiseCata();});
+				SerialisationCatalogue.serialiseCata(); SerialisationCatalogue.serialiseUtil();});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
@@ -640,7 +642,7 @@ public class Interface extends Application{
 				
 			
 //					< / INTERFACE DE CATALOGUE >
-//			
+//
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -656,53 +658,21 @@ public class Interface extends Application{
 				if ( txtNom.getLength()==0 && txtPrenom.getLength()==0 && txtTel.getLength()==0) {
 					Optional<ButtonType> retour = afficherBoiteInfo(0);
 					txtNom.requestFocus();
-				} else if (txtNom.getText().trim().length()!=0 && txtPrenom.getText().trim().length()!=0 && cbConn.isSelected()) {
-					if((txtNom.getText().trim().compareTo("admin")==0) && (txtPrenom.getText().trim().compareTo("admin")==0)) {
-						Optional<ButtonType> retour = afficherBoiteInfo(10);
-						tabAdher.setDisable(false);			// L'admin a toute les options
-						tabPrepo.setDisable(false);
-						tabPrets.setDisable(false);
-						tabUtil.setDisable(false);
-						stage2.showAndWait();	
-					}
-					else if(connectedPrepose(txtNom.getText().trim(), txtPrenom.getText().trim())){
-						Optional<ButtonType> retour = afficherBoiteInfo(9);
-						tabAdher.setDisable(false);			// Le préposé a toutes les options pour l'instant
-						tabPrepo.setDisable(false);
-						tabPrets.setDisable(false);
-						tabUtil.setDisable(false);
-						stage2.showAndWait();
-					}
-					else {
-						Optional<ButtonType> retour = afficherBoiteInfo(12);
-						txtNom.requestFocus();
-					}
-				} else if (txtTel.getLength()!=10 && (txtNom.getText().trim().length()==0 && txtPrenom.getText().trim().length()==0)) {
+				} else if (txtNom.getText().equalsIgnoreCase("admin") && txtPrenom.getText().equalsIgnoreCase("admin") && cbConn.isSelected()) {
+					Optional<ButtonType> retour = afficherBoiteInfo(10);
+					stage2.showAndWait();
+				} else if (txtTel.getLength()!=10 && (txtNom.getLength()==0 && txtPrenom.getLength()==0)) {
 					Optional<ButtonType> retour = afficherBoiteInfo(1);
 					txtTel.requestFocus();
 //					CAS OÙ CONNECTION EST BONNE
-				} else if ((txtNom.getLength()!=0 && txtPrenom.getLength()!=0) && txtTel.getLength()==10 && !cbConn.isSelected()) {
-					if(connectedAdherant(txtNom.getText().trim(), txtPrenom.getText().trim(), txtTel.getText().trim())) {
-						Optional<ButtonType> retour = afficherBoiteInfo(9);
-						tabAdher.setDisable(false);			// Lorsqu'il est connecté l'adhérant
-						tabPrepo.setDisable(true);			// ne peut accèder qu'aux informations
-						tabPrets.setDisable(true);			// de son compte et au catalogue
-						tabUtil.setDisable(true);
-						stage2.showAndWait();
-					}
-					else {
-						Optional<ButtonType> retour = afficherBoiteInfo(12);
-						txtNom.requestFocus();
-					}
+				} else if ((txtNom.getLength()!=0 && txtPrenom.getLength()!=0) && txtTel.getLength()==0 && !cbConn.isSelected()) {
+					Optional<ButtonType> retour = afficherBoiteInfo(9);
+					stage2.showAndWait();
 				} 
 			}
 			
 //				BOUTON CONSULTER LA MÉDIATHÈQUE
 			if (e.getSource() == btnBiblio) {
-				tabAdher.setDisable(true);			// Lorsque l'utilisateur n'est pas 
-				tabPrepo.setDisable(true);			// connecté sur aucun compte il n'a 
-				tabPrets.setDisable(true);			// accès a rien d'autre que le catalogue
-				tabUtil.setDisable(true);
 				stage2.showAndWait();
 			}
 
@@ -771,10 +741,7 @@ public class Interface extends Application{
 				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
 			}
 	
-//				BOUTON SE CONNECTER ADHERANT DANS CATALOGUE
-			if(e.getSource() == btnSeConnecter) {
-				
-			}
+			
 			
 			
 			
@@ -828,12 +795,6 @@ public class Interface extends Application{
 			alert.setHeaderText("");
 			alert.setContentText("Veuillez assurer que la case de recherche soit remplie.");
 			break;
-		case 12:
-			alert=new Alert(AlertType.ERROR);
-			alert.setTitle("Connexion impossible");
-			alert.setHeaderText("");
-			alert.setContentText("La connexion n'a pu être faite. Assurez-vous que les informations que vous rentrez correspondent à celles de votre compte");
-			break;
 		
 		default:
 			break;
@@ -841,44 +802,6 @@ public class Interface extends Application{
 		
 		return alert.showAndWait();
 	}
-	
-	public boolean connectedAdmin(String strID, String strMotDePasse) {
-		boolean ok;
-		if((strID.compareTo("admin") == 0) && (strMotDePasse.compareTo("admin") == 0)) {
-			ok = true;
-		}
-		else {
-			ok = false;
-		}
-		return ok;
-	}
-	
-	public boolean connectedPrepose(String ID, String strMotDePasse) {
-		Comptes comptes = new Comptes();
-		boolean ok = false; 
-		
-		for(Prepose prep: comptes.getLstPrepose()) {
-			if((ID.compareTo(prep.getId()) == 0) && (strMotDePasse.compareTo(prep.getMotDePasse()) == 0)) {
-				ok = true;
-			}
-		}
-		
-		return ok;
-	}
-	
-	public boolean connectedAdherant(String nom, String prenom, String tel) {
-		Comptes comptes = new Comptes();
-		boolean ok = false;
-		
-		for(Adherant adher: comptes.getLstAdherant()) {
-			if((nom.compareTo(adher.getNom()) == 0)&&(prenom.compareTo(adher.getPrenom()) == 0)&&(tel.compareTo(adher.getNumTelephone()) == 0)) {
-				ok = true;
-			}
-		}
-		
-		return ok;
-	}
-	
 	
 
 }	// FIN DE LA CLASSE
