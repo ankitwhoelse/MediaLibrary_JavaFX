@@ -55,16 +55,16 @@ import modele.SerialisationCatalogue;
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU;
-	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID;
-	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP;
+	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnConfirmPrep, btnAjoutPrep;
+	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID, tbModifPrep, tbIDPrep, tbMDP;
+	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT;
 	Text txtAjTitr, txtAjDate, txtAjMC, txtAj2, txtAj3, txtAj4;
 	CheckBox cbConn;
-	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre;
-	Scene scene, scene2, scene3, scene4;
-	Stage stage2, stage3, stage4;
-	Tab tabUtil, tabPrepo, tabAdher, tabPrets;
+	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre, rbModifID, rbModifMDP;
+	Scene scene, scene2, scene3, scene4, scene5;
+	Stage stage2, stage3, stage4, stage5;
+	Tab tabUtil, tabPrepo, tabAdher, tabPrets, tabPrep;
 
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
@@ -327,6 +327,7 @@ public class Interface extends Application{
 			tabPerio.setContent(tablePerio);
 			
 			tabUtil = new Tab();
+			tabPrep = new Tab();
 			tabPrepo = new Tab();
 			tabAdher = new Tab();
 			tabPrets = new Tab();
@@ -334,6 +335,11 @@ public class Interface extends Application{
 			
 			if (true) {			// if logged in comme admin	ou prepose
 			//			onglet utilisateurs
+				
+				
+				// SECTION POUR GERER LES ADHÉRANTS
+				
+				
 				tabUtil.setClosable(false);
 				tabUtil.setText("Adhérants");
 				
@@ -361,7 +367,7 @@ public class Interface extends Application{
 				GridPane gbModifU = new GridPane();
 				gbModifU.setHgap(5);
 				gbModifU.setVgap(5);
-				Text txtModif1 = new Text("Actions sur utilisateurs");
+				Text txtModif1 = new Text("Actions sur adhérants");
 				btnAjoutUtil = new Button("Ajouter");
 				btnAjoutUtil.setOnAction(gc);
 				Button btnSupprUtil = new Button("Supprimer");
@@ -420,13 +426,15 @@ public class Interface extends Application{
 							Optional<ButtonType> retour = afficherBoiteInfo(8);
 						} 
 						else {
+							Adherants listAdher = new Adherants();
 							String nom = tbN.getText().trim();
 							String prenom = tbP.getText().trim();
 							String adresse = tbA.getText().trim();
 							String telephone = tbT.getText().trim();
-							Adherant adher = new Adherant("",telephone, nom, prenom, adresse);
+							Adherant adher = new Adherant("adher" + listAdher.getCompteurID(),telephone, nom, prenom, adresse);
+							listAdher.setCompteurID(listAdher.getCompteurID() + 1);
 							
-//							users.addLstAdherant(adher);
+							listAdher.addLstAdherant(adher);
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
 							tbID.clear();
 							tbP.clear();
@@ -447,7 +455,7 @@ public class Interface extends Application{
 					scene4 = new Scene(vBoxAjU1, 350, 250);
 					stage4 = new Stage();
 					stage4.setScene(scene4);
-					stage4.setTitle("Ajouter un utilisateur");
+					stage4.setTitle("Ajouter un adhérant");
 					stage4.initModality(Modality.APPLICATION_MODAL);
 				
 				tbModifU = new TextField();
@@ -464,6 +472,120 @@ public class Interface extends Application{
 				
 				hBoxAdher.getChildren().addAll(tableUtilisateurs, gbModifU);
 				tabUtil.setContent(hBoxAdher);
+				
+				
+				// SECTION POUR GERER LES PREPOSES
+				
+				
+				tabPrep.setClosable(false);
+				tabPrep.setText("Préposés");
+				
+				HBox hBoxPrep = new HBox();
+				hBoxPrep.setSpacing(20);
+				hBoxPrep.setPadding(new Insets(10));
+								
+				final TableView<Prepose> tabPrepose = new TableView<Prepose>();
+				TableColumn<Prepose, String> colonneIdPrep = new TableColumn<Prepose, String> ("ID");
+				TableColumn<Prepose, String> colonneMotDePasse = new TableColumn<Prepose, String>("Mot de passe");
+				tabPrepose.getColumns().addAll(colonneIdPrep, colonneMotDePasse);
+				
+				if (!preps.getLstPreposes().isEmpty() ) {
+				final ObservableList<Prepose> donneesPrep = FXCollections.observableArrayList(preps.getLstPreposes());
+				colonneIdPrep.setCellValueFactory(new PropertyValueFactory<Prepose, String> ("id"));
+				colonneMotDePasse.setCellValueFactory(new PropertyValueFactory<Prepose, String>("mot de passe"));
+				tabPrepose.setItems(donneesPrep);
+				}
+				GridPane gbModifPrep = new GridPane();
+				gbModifPrep.setHgap(5);
+				gbModifPrep.setVgap(5);
+				Text txtModifPrep = new Text("Actions sur Préposés");
+				btnAjoutPrep = new Button("Ajouter");
+				btnAjoutPrep.setOnAction(gc);
+				Button btnSupprPrep = new Button("Supprimer");
+				Text txtModifPrep2 = new Text("Modification");
+				ToggleGroup tgModifPrep = new ToggleGroup();
+				rbModifID = new RadioButton("ID");
+				rbModifID.setOnAction(gc);
+				rbModifMDP = new RadioButton("Mot de passe");
+				rbModifMDP.setOnAction(gc);
+				tgModifPrep.getToggles().addAll(rbModifID, rbModifMDP);
+				
+//					FENÈTRE MODALE POUR AJOUTER UN UTILISATEUR
+					VBox vBoxAjPrep1 = new VBox();
+					VBox.setMargin(vBoxAjPrep1, new Insets(20));
+					vBoxAjPrep1.setPadding(new Insets(10));
+					
+					Text txtAjUPrep1 = new Text("Informations du préposé");
+//					ToggleGroup tgAjoutCata = new ToggleGroup();
+//					rbAjoutAdh = new RadioButton("Adhérant");
+//					rbAjoutAdh.setOnAction(gc);
+//					rbAjoutAdh.setSelected(true);
+//					rbAjoutPre = new RadioButton("Préposé");
+//					rbAjoutPre.setOnAction(gc);
+//					tgAjoutCata.getToggles().addAll(rbAjoutAdh,rbAjoutPre);
+					
+//					HBox hBoxAjU1 = new HBox();
+//					hBoxAjU1.getChildren().addAll(rbAjoutAdh, rbAjoutPre);
+//					hBoxAjU1.setSpacing(25);
+					
+					GridPane gpAddPrep = new GridPane();
+					gpAddPrep.setHgap(5);
+					gpAddPrep.setVgap(5);
+					Text txtIdPrep = new Text("ID");
+					tbIDPrep = new TextField();
+					txtMDP = new Text("Mot de passe");
+					tbMDP = new TextField();
+					
+					gpAddPrep.add(txtIdPrep, 0, 0);					gpAddPrep.add(tbIDPrep, 1, 0);
+					gpAddPrep.add(txtMDP, 0, 1);					gpAddPrep.add(tbMDP, 1, 1);
+					
+					HBox hBoxAjUPrep2 = new HBox();
+					Button btnPrepConfir = new Button("Confirmer");
+					btnPrepConfir.setOnAction(e -> {
+						if (tbIDPrep.getText().trim().length()==0 || tbMDP.getText().trim().length()==0) {
+							Optional<ButtonType> retour = afficherBoiteInfo(8);
+						} 
+						else {
+							Preposes listPrepose = new Preposes();
+							String ID = tbIDPrep.getText().trim();
+							String MotDePasse = tbMDP.getText().trim();
+							Prepose prep = new Prepose(ID, MotDePasse);
+							
+							listPrepose.addLstPrepose(prep);
+							Optional<ButtonType> retour = afficherBoiteInfo(13);
+							tbIDPrep.clear();
+							tbMDP.clear();
+							stage5.close();
+						}
+					});
+					
+					Button btnPrepQuit = new Button("Annuler");
+					btnPrepQuit.setOnAction(e -> stage5.close());
+					hBoxAjUPrep2.getChildren().addAll(btnPrepConfir, btnPrepQuit);
+					hBoxAjUPrep2.setSpacing(15);
+					vBoxAjPrep1.getChildren().addAll(txtAjUPrep1,/* hBoxAjU1,*/ gpAddPrep, hBoxAjUPrep2);
+					vBoxAjPrep1.setSpacing(10);
+					
+					scene5 = new Scene(vBoxAjPrep1, 350, 250);
+					stage5 = new Stage();
+					stage5.setScene(scene5);
+					stage5.setTitle("Ajouter un préposé");
+					stage5.initModality(Modality.APPLICATION_MODAL);
+				
+				tbModifPrep = new TextField();
+				tbModifPrep.setDisable(true);
+				btnConfirmPrep = new Button("Confirmer");
+				btnConfirmPrep.setDisable(true);
+				
+				gbModifPrep.add(txtModifPrep, 0, 0, 2, 1);
+				gbModifPrep.add(btnAjoutPrep, 0, 1, 1, 1);				gbModifPrep.add(btnSupprPrep, 1, 1, 1, 1);
+				gbModifPrep.add(txtModifPrep2, 0, 2, 2, 1);
+				gbModifPrep.add(rbModifID, 0, 3, 1, 1);				gbModifPrep.add(rbModifMDP, 1, 3, 1, 1);
+				gbModifPrep.add(tbModifPrep, 0, 4, 2, 1);
+				gbModifPrep.add(btnConfirmPrep, 0, 5, 2, 1);
+				
+				hBoxPrep.getChildren().addAll(tabPrepose, gbModifPrep);
+				tabPrep.setContent(hBoxPrep);
 			}
 			
 			if (true) {			// if logged in comme preposé
@@ -638,7 +760,7 @@ public class Interface extends Application{
 				tabPrets.setContent(hBoxPret);
 			}
 			
-			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabPrets, tabUtil, tabPrepo, tabAdher);
+			tabPane.getTabs().addAll(tabDoc, tabDvd, tabLivre, tabPerio, tabAdher, tabPrets, tabPrepo, tabUtil, tabPrep);
 			
 			HBox hBoxBtn = new HBox();
 			
@@ -683,6 +805,7 @@ public class Interface extends Application{
 						tabPrepo.setDisable(false);
 						tabPrets.setDisable(false);
 						tabUtil.setDisable(false);
+						tabPrep.setDisable(false);
 						stage2.showAndWait();	
 					}
 					else if(connectedPrepose(txtNom.getText().trim(), txtPrenom.getText().trim())){
@@ -691,6 +814,7 @@ public class Interface extends Application{
 						tabPrepo.setDisable(false);
 						tabPrets.setDisable(false);
 						tabUtil.setDisable(false);
+						tabPrep.setDisable(true);
 						stage2.showAndWait();
 					}
 					else {
@@ -708,6 +832,7 @@ public class Interface extends Application{
 							tabPrepo.setDisable(true);			// ne peut accèder qu'aux informations
 							tabPrets.setDisable(true);			// de son compte et au catalogue
 							tabUtil.setDisable(true);
+							tabPrep.setDisable(true);
 							stage2.showAndWait();
 						}
 						else {
@@ -720,6 +845,11 @@ public class Interface extends Application{
 			
 //				BOUTON CONSULTER LA MÉDIATHÈQUE
 			if (e.getSource() == btnBiblio) {
+				tabAdher.setDisable(true);			// Lorsque l'utilisateur n'est 
+				tabPrepo.setDisable(true);			// connecté sur aucun compte 
+				tabPrets.setDisable(true);			// il n'a le droit de consulter
+				tabUtil.setDisable(true);			// que le catalogue
+				tabPrep.setDisable(true);			
 				stage2.showAndWait();
 			}
 
@@ -746,9 +876,13 @@ public class Interface extends Application{
 				txtNom.requestFocus();
 			}	
 			
-//				BOUTTON DE AJOUTER UTILISATEUR
+//				BOUTTON DE AJOUTER ADHÉRANTS
 			if (e.getSource() == btnAjoutUtil) {
 				stage4.showAndWait();
+			}
+			
+			if(e.getSource() == btnAjoutPrep) {
+				stage5.showAndWait();
 			}
 		
 ////				ENSEMBLE DE RADIO BUTTONS DE AJOUT DE UTILISATEURS
@@ -762,14 +896,23 @@ public class Interface extends Application{
 //				txtN.setVisible(false); txtA.setVisible(false); txtT.setVisible(false);
 //			}
 			
-//				ENSEMBLE DE RADIO BUTTON DE MODIFICATION DES INFORMATIONS DES UTILISATEURS
-//			if (rbModifAdr.isSelected()) {
-//				tbModifU.setDisable(false);
-//				btnConfirmU.setDisable(false);
-//			} else if (rbModifTel.isSelected()) {
-//				tbModifU.setDisable(false);
-//				btnConfirmU.setDisable(false);
-//			}
+//				ENSEMBLE DE RADIO BUTTON DE MODIFICATION DES INFORMATIONS DES ADHÉRANTS
+			if (rbModifAdr.isSelected()) {
+				tbModifU.setDisable(false);
+				btnConfirmU.setDisable(false);
+			} else if (rbModifTel.isSelected()) {
+				tbModifU.setDisable(false);
+				btnConfirmU.setDisable(false);
+			}
+			
+//				ENSEMBLE DE RADIO BUTTON DE MODIFICATION DES INFORMATIONS DES PRÉPOSÉS
+			if (rbModifID.isSelected()) {
+				tbModifPrep.setDisable(false);
+				btnConfirmPrep.setDisable(false);
+			} else if (rbModifMDP.isSelected()) {
+				tbModifPrep.setDisable(false);
+				btnConfirmPrep.setDisable(false);
+			}
 			
 //				STAGE 3, BOITE DE AJOUT CATALOGUE
 			if (e.getSource() == btnAjoutCata) {

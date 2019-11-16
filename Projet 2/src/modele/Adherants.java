@@ -15,6 +15,7 @@ public class Adherants implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private	static Adherants instance;
 	private ArrayList<Adherant> lstAdherants = new ArrayList<>();
+	private int compteurID = 1;
 	
 	public Adherants() {
 		
@@ -68,6 +69,14 @@ public class Adherants implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getCompteurID() {
+		return compteurID;
+	}
+
+	public void setCompteurID(int compteurID) {
+		this.compteurID = compteurID;
 	}
 	
 }
