@@ -10,40 +10,41 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Preposes implements Serializable{
-
-	private static final long serialVersionUID = 1L;
-	private	static Preposes instance;
-	private static ArrayList<Prepose> lstPreposes = new ArrayList<>();
+public class ArchivePret implements Serializable{
 	
-	public Preposes() {
+	private static final long serialVersionUID = 1L;
+	private	static ArchivePret instance;
+	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
+
+	public ArrayList<Pret> getLstPrets() {
+		return lstPrets;
+	}
+
+	public void addLstPrets(Pret pret) {
+		lstPrets.add(pret);
+	}
+	
+	
+	public ArchivePret() {
 		
 	}	
 	
-	public static Preposes getPreposes() {
+	public static ArchivePret getArchivePret() {
 		if (instance==null) {
-			instance = new Preposes();
+			instance=new ArchivePret();
 		}
 		return instance;
 	}
-	
-	public static void addLstPrepose(Prepose prep) {
-		lstPreposes.add(prep);
-	}
 
-	public static ArrayList<Prepose> getLstPreposes() {
-		return lstPreposes;
-	}
-
-	public Preposes deserialisePreposes() {
-		Preposes adh = new Preposes();
+	public ArchivePret deserialiseArchivePret() {
+		ArchivePret archive = new ArchivePret();
 		
 		try {
-			FileInputStream fichier = new FileInputStream("preposes.ser");
+			FileInputStream fichier = new FileInputStream("archive.ser");
 			ObjectInputStream is = new ObjectInputStream(fichier);
 	
-			adh = (Preposes) is.readObject();
-			System.out.println("désérialise preposes");
+			archive = (ArchivePret) is.readObject();
+			System.out.println("désérialise archive prêt");
 
 			is.close();
 				
@@ -57,15 +58,15 @@ public class Preposes implements Serializable{
 			e.printStackTrace();
 		}
 		
-		return adh;
+		return archive;
 	}
 	
-	public static void serialisePreposes() {
+	public static void serialiseArchivePret() {
 		try {
-			FileOutputStream fichier = new FileOutputStream("preposes.ser");
+			FileOutputStream fichier = new FileOutputStream("archive.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);
 			
-			System.out.println("preposes sérialisation");
+			System.out.println("archive prêt sérialisation");
 			os.writeObject(instance);
 			
 			os.close();
@@ -74,5 +75,4 @@ public class Preposes implements Serializable{
 			e.printStackTrace();
 		}
 	}
-	
 }

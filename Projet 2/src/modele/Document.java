@@ -9,9 +9,9 @@ public class Document implements Serializable{
 	private String  noDoc;
 	private String  titre;
 	private LocalDate  dateParution;
-	private String  disponible;
+	private boolean  disponible;
 	
-	public Document(String noDoc, String titre, LocalDate dateParution, String disponible) {
+	public Document(String noDoc, String titre, LocalDate dateParution, boolean disponible) {
 		super();
 		this.noDoc = noDoc;
 		this.titre = titre;
@@ -49,11 +49,11 @@ public class Document implements Serializable{
 		this.dateParution = dateParution;
 	}
 
-	public String getDisponible() {
+	public boolean getDisponible() {
 		return disponible;
 	}
 
-	public void setDisponible(String disponible) {
+	public void setDisponible(boolean disponible) {
 		this.disponible = disponible;
 	}
 	

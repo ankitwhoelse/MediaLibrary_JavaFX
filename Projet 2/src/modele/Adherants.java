@@ -14,11 +14,11 @@ public class Adherants implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private	static Adherants instance;
-	private ArrayList<Adherant> lstAdherants = new ArrayList<>();
-	private int compteurID = 1;
+	private static ArrayList<Adherant> lstAdherants = new ArrayList<>();
+	private static int compteurID;
 	
 	public Adherants() {
-		
+		compteurID = 1;
 	}	
 	
 	public static Adherants getAdherants() {
@@ -28,11 +28,15 @@ public class Adherants implements Serializable{
 		return instance;
 	}
 	
-	public void addLstAdherant(Adherant adher) {
+	public static void addLstAdherant(Adherant adher) {
 		lstAdherants.add(adher);
 	}
+	
+	public static void addCompteur() {
+		compteurID++;
+	}
 
-	public ArrayList<Adherant> getLstAdherants() {
+	public static ArrayList<Adherant> getLstAdherants() {
 		return lstAdherants;
 	}
 
@@ -49,9 +53,14 @@ public class Adherants implements Serializable{
 			is.close();
 				
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		} catch (EOFException e) {
-		} catch (IOException e) {}
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return adh;
 	}
@@ -71,12 +80,8 @@ public class Adherants implements Serializable{
 		}
 	}
 
-	public int getCompteurID() {
+	public static int getCompteurID() {
 		return compteurID;
-	}
-
-	public void setCompteurID(int compteurID) {
-		this.compteurID = compteurID;
 	}
 	
 }

@@ -2,10 +2,12 @@ package vue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Optional;
 
 import modele.Adherant;
 import modele.Adherants;
+import modele.ArchivePret;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,10 +57,10 @@ import modele.SerialisationCatalogue;
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnConfirmPrep, btnAjoutPrep;
+	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID, tbModifPrep, tbIDPrep, tbMDP;
 	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP;
-	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT;
+	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT, tbEmprID, tbEmprDocID;
 	Text txtAjTitr, txtAjDate, txtAjMC, txtAj2, txtAj3, txtAj4;
 	CheckBox cbConn;
 	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre, rbModifID, rbModifMDP;
@@ -195,6 +197,8 @@ public class Interface extends Application{
 			adh = adh.deserialiseAdherants();
 			Preposes preps = Preposes.getPreposes();
 			preps = preps.deserialisePreposes();
+			ArchivePret archive = ArchivePret.getArchivePret();
+			archive = archive.deserialiseArchivePret();
 			
 //				onglet documents
 			Tab tabDoc = new Tab();
@@ -214,7 +218,7 @@ public class Interface extends Application{
 			colonneParution1.setPrefWidth(120);			colonneParution1.setMaxWidth(120);
 			colonneDispo1.setPrefWidth(120);			colonneDispo1.setMaxWidth(120);
 
-			ArrayList<Document> lstDocs = cata.getLstDoc();
+			ArrayList<Document> lstDocs = Catalogue.getLstDoc();
 			final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(lstDocs);
 			colonneNum1.setCellValueFactory(new PropertyValueFactory<Document, String>("noDoc"));
 			colonneTitre1.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
@@ -247,7 +251,7 @@ public class Interface extends Application{
 			colonneDisk.setPrefWidth(120);			colonneDisk.setMaxWidth(120);
 			colonneRealis.setPrefWidth(120);			colonneRealis.setMaxWidth(120);
 			
-			final ObservableList<DVD> donneesDvd = FXCollections.observableArrayList(cata.getLstDvd());
+			final ObservableList<DVD> donneesDvd = FXCollections.observableArrayList(Catalogue.getLstDvd());
 			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
 			colonneTitre2.setCellValueFactory(new PropertyValueFactory<>("titre"));
 			colonneParution2.setCellValueFactory(new PropertyValueFactory<>("dateParution"));
@@ -281,7 +285,7 @@ public class Interface extends Application{
 			colonneMCle.setPrefWidth(120);			colonneMCle.setMaxWidth(120);
 			colonneAuteur.setPrefWidth(120);			colonneAuteur.setMaxWidth(120);
 			
-			final ObservableList<Livre> donneesLives = FXCollections.observableArrayList(cata.getLstLvr());
+			final ObservableList<Livre> donneesLives = FXCollections.observableArrayList(Catalogue.getLstLvr());
 			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
 			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
 			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
@@ -315,7 +319,7 @@ public class Interface extends Application{
 			colonneVol.setPrefWidth(120);			colonneVol.setMaxWidth(120);
 			colonnePerio.setPrefWidth(130);			colonnePerio.setMaxWidth(130);
 			
-			final ObservableList<Periodique> donneesPerio = FXCollections.observableArrayList(cata.getLstPer());
+			final ObservableList<Periodique> donneesPerio = FXCollections.observableArrayList(Catalogue.getLstPer());
 			colonneNum4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("noDoc"));
 			colonneTitre4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("titre"));
 			colonneParution4.setCellValueFactory(new PropertyValueFactory<Periodique, LocalDate>("dateParution"));
@@ -355,15 +359,15 @@ public class Interface extends Application{
 				TableColumn<Adherant, String> colonneAdresse = new TableColumn<Adherant, String>("Adresse");
 				tableUtilisateurs.getColumns().addAll(colonneId, colonneNom, colonnePrenom, colonneNumTel, colonneAdresse);
 				
-				if (!adh.getLstAdherants().isEmpty() ) {
-				final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(adh.getLstAdherants());
-				colonneId.setCellValueFactory(new PropertyValueFactory<Adherant, String> ("id"));
+//				if (!adh.getLstAdherants().isEmpty() ) {
+				final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(Adherants.getLstAdherants());
+				colonneId.setCellValueFactory(new PropertyValueFactory<Adherant, String> ("strId"));
 				colonneNom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("nom"));
 				colonnePrenom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("prenom"));
 				colonneNumTel.setCellValueFactory(new PropertyValueFactory<Adherant, String>("numTelephone"));
 				colonneAdresse.setCellValueFactory(new PropertyValueFactory<Adherant, String>("adresse"));
 				tableUtilisateurs.setItems(donneesAdh);
-				}
+//				}
 				GridPane gbModifU = new GridPane();
 				gbModifU.setHgap(5);
 				gbModifU.setVgap(5);
@@ -385,17 +389,6 @@ public class Interface extends Application{
 					vBoxAjU1.setPadding(new Insets(10));
 					
 					Text txtAjU1 = new Text("Informations de l'adhérant");
-//					ToggleGroup tgAjoutCata = new ToggleGroup();
-//					rbAjoutAdh = new RadioButton("Adhérant");
-//					rbAjoutAdh.setOnAction(gc);
-//					rbAjoutAdh.setSelected(true);
-//					rbAjoutPre = new RadioButton("Préposé");
-//					rbAjoutPre.setOnAction(gc);
-//					tgAjoutCata.getToggles().addAll(rbAjoutAdh,rbAjoutPre);
-					
-//					HBox hBoxAjU1 = new HBox();
-//					hBoxAjU1.getChildren().addAll(rbAjoutAdh, rbAjoutPre);
-//					hBoxAjU1.setSpacing(25);
 					
 					GridPane gpAddUser = new GridPane();
 					gpAddUser.setHgap(5);
@@ -426,15 +419,20 @@ public class Interface extends Application{
 							Optional<ButtonType> retour = afficherBoiteInfo(8);
 						} 
 						else {
-							Adherants listAdher = new Adherants();
 							String nom = tbN.getText().trim();
 							String prenom = tbP.getText().trim();
 							String adresse = tbA.getText().trim();
 							String telephone = tbT.getText().trim();
-							Adherant adher = new Adherant("adher" + listAdher.getCompteurID(),telephone, nom, prenom, adresse);
-							listAdher.setCompteurID(listAdher.getCompteurID() + 1);
+							Adherant adher = new Adherant("adher" + Adherants.getCompteurID(),telephone, nom, prenom, adresse);
+							Adherants.addCompteur();
 							
-							listAdher.addLstAdherant(adher);
+							Adherants.addLstAdherant(adher);
+							donneesAdh.add(adher);
+							
+							for(Adherant a: Adherants.getLstAdherants()) {
+								System.out.println(a);
+							}
+							
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
 							tbID.clear();
 							tbP.clear();
@@ -449,7 +447,7 @@ public class Interface extends Application{
 					btnUserQuit.setOnAction(e -> stage4.close());
 					hBoxAjU2.getChildren().addAll(btnUserConfir, btnUserQuit);
 					hBoxAjU2.setSpacing(15);
-					vBoxAjU1.getChildren().addAll(txtAjU1,/* hBoxAjU1,*/ gpAddUser, hBoxAjU2);
+					vBoxAjU1.getChildren().addAll(txtAjU1, gpAddUser, hBoxAjU2);
 					vBoxAjU1.setSpacing(10);
 					
 					scene4 = new Scene(vBoxAjU1, 350, 250);
@@ -489,12 +487,13 @@ public class Interface extends Application{
 				TableColumn<Prepose, String> colonneMotDePasse = new TableColumn<Prepose, String>("Mot de passe");
 				tabPrepose.getColumns().addAll(colonneIdPrep, colonneMotDePasse);
 				
-				if (!preps.getLstPreposes().isEmpty() ) {
-				final ObservableList<Prepose> donneesPrep = FXCollections.observableArrayList(preps.getLstPreposes());
+//				if (!preps.getLstPreposes().isEmpty()) {
+//				System.out.println("la liste n'est pas vide");
+				final ObservableList<Prepose> donneesPrep = FXCollections.observableArrayList(Preposes.getLstPreposes());
 				colonneIdPrep.setCellValueFactory(new PropertyValueFactory<Prepose, String> ("id"));
-				colonneMotDePasse.setCellValueFactory(new PropertyValueFactory<Prepose, String>("mot de passe"));
+				colonneMotDePasse.setCellValueFactory(new PropertyValueFactory<Prepose, String> ("MotDePasse"));
 				tabPrepose.setItems(donneesPrep);
-				}
+//				}
 				GridPane gbModifPrep = new GridPane();
 				gbModifPrep.setHgap(5);
 				gbModifPrep.setVgap(5);
@@ -546,12 +545,17 @@ public class Interface extends Application{
 							Optional<ButtonType> retour = afficherBoiteInfo(8);
 						} 
 						else {
-							Preposes listPrepose = new Preposes();
 							String ID = tbIDPrep.getText().trim();
 							String MotDePasse = tbMDP.getText().trim();
 							Prepose prep = new Prepose(ID, MotDePasse);
 							
-							listPrepose.addLstPrepose(prep);
+							Preposes.addLstPrepose(prep);
+							donneesPrep.add(prep);
+							
+							for(Prepose p: Preposes.getLstPreposes()) {
+								System.out.println(p);
+							}
+							
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
 							tbIDPrep.clear();
 							tbMDP.clear();
@@ -604,7 +608,7 @@ public class Interface extends Application{
 				TableColumn<Document, String> colonneNumDi = new TableColumn<Document, String>("Disponibilite");
 				tableCatalogue.getColumns().addAll(colonneNo, colonneTi, colonneDP, colonneNumDi);
 				
-				final ObservableList<Document> donneesCata = FXCollections.observableArrayList(cata.getLstDoc());
+				final ObservableList<Document> donneesCata = FXCollections.observableArrayList(Catalogue.getLstDoc());
 				colonneNo.setCellValueFactory(new PropertyValueFactory<Document, String> ("noDoc"));
 				colonneTi.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
 				colonneDP.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
@@ -739,14 +743,14 @@ public class Interface extends Application{
 				gpEmpr.setHgap(5);
 				
 				Text txtEmprID = new Text("ID de l'adhérant");
-				TextField tbEmprID = new TextField();
+				tbEmprID = new TextField();
 				tbEmprID.setMaxWidth(50);
 				tbEmprID.setPrefWidth(50);
-				Button btnRetourner = new Button("Inscrire un retour");
-				Button btnEmprunter = new Button("Inscrire un prêt");
-				Button btnPayer = new Button("Payer une amende");
+				btnRetourner = new Button("Inscrire un retour");
+				btnEmprunter = new Button("Inscrire un prêt");
+				btnPayer = new Button("Payer une amende");
 				Text txtEmprDocID = new Text("Doc ID:");
-				TextField tbEmprDocID = new TextField();
+				tbEmprDocID = new TextField();
 				tbEmprDocID.setMaxWidth(50);
 				tbEmprDocID.setPrefWidth(50);
 
@@ -767,12 +771,13 @@ public class Interface extends Application{
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
 			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); 
-				SerialisationCatalogue.serialiseCata(); Adherants.serialiseAdherants(); Preposes.serialisePreposes();;});
+				SerialisationCatalogue.serialiseCata(); Adherants.serialiseAdherants(); Preposes.serialisePreposes();});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
 			btnFermer.setText("Fermer le catalogue");
-			btnFermer.setOnAction(e -> stage2.close());
+			btnFermer.setOnAction(e -> {stage2.close();
+			SerialisationCatalogue.serialiseCata(); Adherants.serialiseAdherants(); Preposes.serialisePreposes();});
 			HBox.setMargin(btnFermer, new Insets(10));
 					
 			hBoxBtn.getChildren().addAll(btnQuit, btnFermer);
@@ -790,6 +795,7 @@ public class Interface extends Application{
 	
 	public class GestionClick implements EventHandler<ActionEvent> {
 		
+		@SuppressWarnings({ "unused", "unused" })
 		public void handle(ActionEvent e) {
 			
 			if (e.getSource() == btnCons) {
@@ -931,7 +937,71 @@ public class Interface extends Application{
 //				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
 //			}
 	
-			
+//			BOUTON POUR EMPRUNTER UN DOCUMENT
+			if(e.getSource() == btnEmprunter) {
+				if(tbEmprDocID.getText().trim().length()==0 || tbEmprID.getText().trim().length()==0) {
+					Optional<ButtonType> retour = afficherBoiteInfo(8);
+				}
+				else {
+					String IDdoc = tbEmprDocID.getText().trim();
+					String IDAdher = tbEmprID.getText().trim();
+					boolean booIDOK = EmpruntIdOK(IDdoc, IDAdher);
+					if(booIDOK) {
+						boolean booAmendeok = true;
+						Adherant adherant = getAdherant(IDAdher);
+						for(Pret pret: adherant.getLstPrets()) {
+							if(pret.getAmende() != 0) {
+								booAmendeok = false;
+								Optional<ButtonType> retour = afficherBoiteInfo(17);
+							}
+						}
+						if(booAmendeok) {
+							String typedoc = TypeDocument(IDdoc);
+							
+							Pret pret;
+							// 2 DVD MAX, 3 LIVRES MAX, 1 PERIODIQUE MAX
+							switch (typedoc) {
+							case "dvd":
+								if(NombreEmprunter(IDAdher, typedoc) == 2) {
+									Optional<ButtonType> retour = afficherBoiteInfo(16);
+								}
+								else {
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc);
+										adherant.addPret(pret);
+										getDoc(IDdoc).setDisponible(false);
+								}
+								break;
+							case "lvr":
+								if(NombreEmprunter(IDAdher, typedoc) == 3) {
+									Optional<ButtonType> retour = afficherBoiteInfo(16);
+								}
+								else {
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc);
+										adherant.addPret(pret);
+										getDoc(IDdoc).setDisponible(false);
+								}
+								break;
+							case "per":
+								if(NombreEmprunter(IDAdher, typedoc) == 1) {
+									Optional<ButtonType> retour = afficherBoiteInfo(16);
+								}
+								else {
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc);
+											adherant.addPret(pret);
+											getDoc(IDdoc).setDisponible(false);
+								}
+								break;
+							default:
+								break;
+							}
+						}
+					}
+					else {
+						Optional<ButtonType> retour = afficherBoiteInfo(15);
+					}
+					
+				}
+			}
 			
 			
 			
@@ -1003,6 +1073,24 @@ public class Interface extends Application{
 			alert.setHeaderText("");
 			alert.setContentText("Le préposé a été correctement ajouté");
 			break;
+		case 15:
+			alert=new Alert(AlertType.ERROR);
+			alert.setTitle("Document ou Adhérant inexistant");
+			alert.setHeaderText("");
+			alert.setContentText("Le numéro de document ou l'id d'adhérant que vous avez tappé n'existe pas dans la base de donnée");
+			break;
+		case 16:
+			alert=new Alert(AlertType.ERROR);
+			alert.setTitle("Nombre emprunt maximum");
+			alert.setHeaderText("");
+			alert.setContentText("Le nombre d'emprunt maximum pour ce type de document a déjà été atteint");
+			break;
+		case 17:
+			alert=new Alert(AlertType.ERROR);
+			alert.setTitle("Amende");
+			alert.setHeaderText("");
+			alert.setContentText("Cet adhérant a une amende non-payée");
+			break;
 		
 		default:
 			break;
@@ -1023,10 +1111,9 @@ public class Interface extends Application{
 	}
 	
 	public boolean connectedPrepose(String ID, String strMotDePasse) {
-		Preposes preps = Preposes.getPreposes();
 		boolean ok = false; 
 		
-		for(Prepose prep: preps.getLstPreposes()) {
+		for(Prepose prep: Preposes.getLstPreposes()) {
 			if((ID.compareTo(prep.getId()) == 0) && (strMotDePasse.compareTo(prep.getMotDePasse()) == 0)) {
 				ok = true;
 			}
@@ -1036,16 +1123,99 @@ public class Interface extends Application{
 	}
 	
 	public boolean connectedAdherant(String nom, String prenom, String tel) {
-		Adherants adh = Adherants.getAdherants();
 		boolean ok = false;
 		
-		for(Adherant adher: adh.getLstAdherants()) {
+		for(Adherant adher: Adherants.getLstAdherants()) {
 			if((nom.compareTo(adher.getNom()) == 0)&&(prenom.compareTo(adher.getPrenom()) == 0)&&(tel.compareTo(adher.getNumTelephone()) == 0)) {
 				ok = true;
 			}
 		}
 		
 		return ok;
+	}
+	
+//	TROUVER SI LE DOCUMENT ET L'ADHÉRANT EXISTE
+	public boolean EmpruntIdOK (String idDoc, String idAdher) {
+		boolean ok;
+		boolean adhe = false;
+		boolean doc = false;
+		
+		for(Adherant adher: Adherants.getLstAdherants()) {
+			if(idAdher.compareTo(adher.getStrId()) == 0) {
+				adhe = true;
+			}
+		}
+		
+		for(Document document : Catalogue.getLstDoc()) {
+			if(idDoc.compareTo(document.getNoDoc()) == 0) {
+				doc = true;
+			}
+		}
+		
+		ok = adhe & doc;
+		
+		return ok;
+	}
+	
+//	TROUVER LE TYPE DE DOCUMENT EMPRUNTER
+	public String TypeDocument(String idDoc) {
+		String type = "";
+		
+		for(Document document: Catalogue.getLstDvd()) {
+			if(idDoc.compareTo(document.getNoDoc()) == 0) {
+				type = "dvd";
+			}
+		}
+		
+		for(Document document: Catalogue.getLstLvr()) {
+			if(idDoc.compareTo(document.getNoDoc()) == 0) {
+				type = "lvr";
+			}
+		}
+		
+		for(Document document : Catalogue.getLstPer()) {
+			if(idDoc.compareTo(document.getNoDoc()) == 0) {
+				type = "per";
+			}
+		}
+		
+		return type;
+	}
+	
+//	TROUVER LE NOMBRE DE PRÊT D'UN MÊME TYPE DE DOCUMENT
+	public int NombreEmprunter(String idAdher, String typeDoc) {
+		int Compteur = 0;
+		for(Adherant adher: Adherants.getLstAdherants()) {
+			for(Pret pret : adher.getLstPrets()) {
+				if(typeDoc.compareTo(TypeDocument(pret.getNoDoc())) == 0) {
+					Compteur++;
+				}
+			}
+		}
+		
+		return Compteur;
+	}
+	
+// TROUVER UN ADHERANT A PARTIR DE SON ID	
+	public Adherant getAdherant(String idAdher) {
+		Adherant adher = null;
+		for(Adherant adherant: Adherants.getLstAdherants()) {
+			if(idAdher.compareTo(adherant.getStrId()) == 0) {
+				adher = adherant;
+			}
+		}
+		return adher;
+	}
+	
+//	TROUVER UN DOCUMENT A PARTIR DE SON ID
+	public Document getDoc(String idDoc) {
+		Document doc = null;
+		for(Document document: Catalogue.getLstDoc()) {
+			if(idDoc.compareTo(document.getNoDoc()) == 0) {
+				doc = document;
+			}
+		}
+		return doc;
 	}
 
 }	// FIN DE LA CLASSE

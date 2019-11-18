@@ -21,5 +21,7 @@ public class Prepose extends Preposes implements Serializable{
 		return strId;
 	}
 
-
+	public String toString() {
+		return "ID: " + strId + " Mot de passe: " + MotDePasse;
+	}
 }

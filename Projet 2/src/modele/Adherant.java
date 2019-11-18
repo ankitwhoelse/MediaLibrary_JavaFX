@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,8 @@ public class Adherant extends Adherants implements Serializable{
 	private String prenom;
 	private String adresse;
 	private ObservableList<Pret> Prets = FXCollections.observableArrayList();
-	private ListView<Pret> lstPrets = new ListView<>(Prets);
+//	private ListView<Pret> lstPrets = new ListView<>(Prets);
+	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 
 	public String getStrId() {
 		return strId;
@@ -40,8 +42,16 @@ public class Adherant extends Adherants implements Serializable{
 		return Prets;
 	}
 
-	public ListView<Pret> getLstPrets() {
+//	public ListView<Pret> getLstPrets() {
+//		return lstPrets;
+//	}
+	
+	public ArrayList<Pret> getLstPrets() {
 		return lstPrets;
+	}
+	
+	public void addPret(Pret pret) {
+		lstPrets.add(pret);
 	}
 
 	public Adherant(String strId, String numTelephone, String nom, String prenom, String adresse) {
@@ -52,5 +62,7 @@ public class Adherant extends Adherants implements Serializable{
 		this.adresse = adresse;
 	}
 
-
+	public String toString() {
+		return "ID: " + strId + " Prenom: " + prenom + " Nom: " + nom + " Adresse: " + adresse + " Numéro de téléphone: " + numTelephone;
+	}
 }

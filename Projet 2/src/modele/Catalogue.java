@@ -18,10 +18,10 @@ public final class Catalogue implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private static Catalogue instance;
-	private ArrayList<Document> lstDocuments = new ArrayList<>();
-	private ArrayList<Livre> lstLivres = new ArrayList<>();
-	private ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
-	private ArrayList<DVD> lstDvd = new ArrayList<>();
+	private static ArrayList<Document> lstDocuments = new ArrayList<>();
+	private static ArrayList<Livre> lstLivres = new ArrayList<>();
+	private static ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
+	private static ArrayList<DVD> lstDvd = new ArrayList<>();
 
 	public Catalogue() {
 		
@@ -105,19 +105,19 @@ public final class Catalogue implements Serializable {
 		return instance;
 	}
 	
-	public ArrayList<Document> getLstDoc() {
+	public static ArrayList<Document> getLstDoc() {
 		return lstDocuments;
 	}
 	
-	public ArrayList<Periodique> getLstPer() {
+	public static ArrayList<Periodique> getLstPer() {
 		return lstPeriodiques;
 	}
 	
-	public ArrayList<Livre> getLstLvr() {
+	public static ArrayList<Livre> getLstLvr() {
 		return lstLivres;
 	}
 	
-	public ArrayList<DVD> getLstDvd() {
+	public static ArrayList<DVD> getLstDvd() {
 		return lstDvd;
 	}
 	
