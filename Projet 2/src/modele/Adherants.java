@@ -19,9 +19,28 @@ public class Adherants implements Serializable{
 	
 	public Adherants() {
 		compteurID = 1;
+		
+		try {
+			FileInputStream fichier = new FileInputStream("adherants.ser");
+			ObjectInputStream is = new ObjectInputStream(fichier);
+	
+			instance = (Adherants) is.readObject();
+			System.out.println("désérialise adherants");
+
+			is.close();
+				
+		} catch (FileNotFoundException e) {
+		//	e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (EOFException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}	
 	
-	public static Adherants getAdherants() {
+	public static Adherants getInstance() {
 		if (instance==null) {
 			instance=new Adherants();
 		}
@@ -38,31 +57,6 @@ public class Adherants implements Serializable{
 
 	public static ArrayList<Adherant> getLstAdherants() {
 		return lstAdherants;
-	}
-
-	public Adherants deserialiseAdherants() {
-		Adherants adh = new Adherants();
-		
-		try {
-			FileInputStream fichier = new FileInputStream("adherants.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
-	
-			adh = (Adherants) is.readObject();
-			System.out.println("désérialise adherants");
-
-			is.close();
-				
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (EOFException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return adh;
 	}
 	
 	public static void serialiseAdherants() {

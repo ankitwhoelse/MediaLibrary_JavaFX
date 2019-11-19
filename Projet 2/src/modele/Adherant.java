@@ -15,7 +15,7 @@ public class Adherant extends Adherants implements Serializable{
 	private String nom;
 	private String prenom;
 	private String adresse;
-	private ObservableList<Pret> Prets = FXCollections.observableArrayList();
+	//private ArrayList<Pret> Prets = ArrayList<Pret>();
 //	private ListView<Pret> lstPrets = new ListView<>(Prets);
 	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 
@@ -38,8 +38,8 @@ public class Adherant extends Adherants implements Serializable{
 		return adresse;
 	}
 
-	public ObservableList<Pret> getPrets() {
-		return Prets;
+	public ArrayList<Pret> getPrets() {
+		return lstPrets;
 	}
 
 //	public ListView<Pret> getLstPrets() {
@@ -61,8 +61,8 @@ public class Adherant extends Adherants implements Serializable{
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
-	public void setPrets(ObservableList<Pret> prets) {
-		Prets = prets;
+	public void setPrets(ArrayList<Pret> prets) {
+		lstPrets = prets;
 	}
 	public void setLstPrets(ArrayList<Pret> lstPrets) {
 		this.lstPrets = lstPrets;

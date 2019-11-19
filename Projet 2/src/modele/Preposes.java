@@ -17,7 +17,24 @@ public class Preposes implements Serializable{
 	private static ArrayList<Prepose> lstPreposes = new ArrayList<>();
 	
 	public Preposes() {
-		
+		try {
+			FileInputStream fichier = new FileInputStream("preposes.ser");
+			ObjectInputStream is = new ObjectInputStream(fichier);
+	
+			instance = (Preposes) is.readObject();
+			System.out.println("désérialise preposes");
+
+			is.close();
+				
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (EOFException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}	
 	
 	public static Preposes getPreposes() {
@@ -33,31 +50,6 @@ public class Preposes implements Serializable{
 
 	public static ArrayList<Prepose> getLstPreposes() {
 		return lstPreposes;
-	}
-
-	public Preposes deserialisePreposes() {
-		Preposes adh = new Preposes();
-		
-		try {
-			FileInputStream fichier = new FileInputStream("preposes.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
-	
-			adh = (Preposes) is.readObject();
-			System.out.println("désérialise preposes");
-
-			is.close();
-				
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (EOFException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return adh;
 	}
 	
 	public static void serialisePreposes() {

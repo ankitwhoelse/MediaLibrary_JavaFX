@@ -28,23 +28,12 @@ public class ArchivePret implements Serializable{
 	
 	public ArchivePret() {
 		compteurIdPret = 1;
-	}	
-	
-	public static ArchivePret getArchivePret() {
-		if (instance==null) {
-			instance=new ArchivePret();
-		}
-		return instance;
-	}
-
-	public ArchivePret deserialiseArchivePret() {
-		ArchivePret archive = new ArchivePret();
 		
 		try {
 			FileInputStream fichier = new FileInputStream("archive.ser");
 			ObjectInputStream is = new ObjectInputStream(fichier);
 	
-			archive = (ArchivePret) is.readObject();
+			instance = (ArchivePret) is.readObject();
 			System.out.println("désérialise archive prêt");
 
 			is.close();
@@ -58,10 +47,15 @@ public class ArchivePret implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return archive;
-	}
+	}	
 	
+	public static ArchivePret getArchivePret() {
+		if (instance==null) {
+			instance=new ArchivePret();
+		}
+		return instance;
+	}
+
 	public static void serialiseArchivePret() {
 		try {
 			FileOutputStream fichier = new FileOutputStream("archive.ser");

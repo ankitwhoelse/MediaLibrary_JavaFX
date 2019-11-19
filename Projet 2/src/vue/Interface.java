@@ -201,12 +201,12 @@ public class Interface extends Application{
 			
 			Catalogue cata = Catalogue.getCatalogue();
 			cata = DeserialisationCatalogue.getDeseriaCata();
-			Adherants adh = Adherants.getAdherants();
-			adh = adh.deserialiseAdherants();
+	//		Adherants adh = Adherants.getAdherants();
+		//	adh = adh.deserialiseAdherants();
 			Preposes preps = Preposes.getPreposes();
-			preps = preps.deserialisePreposes();
+		//	preps = preps.deserialisePreposes();
 			ArchivePret archive = ArchivePret.getArchivePret();
-			archive = archive.deserialiseArchivePret();
+		//	archive = archive.deserialiseArchivePret();
 			
 //				onglet documents
 			Tab tabDoc = new Tab();
