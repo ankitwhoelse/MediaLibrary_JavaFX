@@ -11,6 +11,7 @@ import modele.ArchivePret;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -81,7 +82,7 @@ public class Interface extends Application{
 	final TableView<Periodique> tablePerio = new TableView<Periodique>();
 	ObservableList<Periodique> donneesPerio;
 	final TableView<Livre> tableLivre = new TableView<Livre>();
-	ObservableList<Livre> donneesLives;
+	ObservableList<Livre> donneesLivres;
 	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
@@ -173,7 +174,7 @@ public class Interface extends Application{
 			stage2.setScene(scene2);
 			stage2.setTitle("Mediatheque");
 			stage2.initModality(Modality.APPLICATION_MODAL);
-			
+						
 			tabPane = new TabPane();
 			VBox vBox2 = new VBox();
 			vBox2.setSpacing(10);
@@ -226,10 +227,10 @@ public class Interface extends Application{
 			TableColumn<Document, String> colonneDispo1 = new TableColumn<Document, String> ("Disponible");
 			tableDoc.getColumns().addAll(colonneNum1, colonneTitre1, colonneParution1, colonneDispo1);
 			
-			colonneNum1.setPrefWidth(120);				colonneNum1.setMaxWidth(120);
-			colonneTitre1.setPrefWidth(120);			colonneTitre1.setMaxWidth(120);
+			colonneNum1.setPrefWidth(60);				colonneNum1.setMaxWidth(60);
+			colonneTitre1.setPrefWidth(560);			colonneTitre1.setMaxWidth(560);
 			colonneParution1.setPrefWidth(120);			colonneParution1.setMaxWidth(120);
-			colonneDispo1.setPrefWidth(120);			colonneDispo1.setMaxWidth(120);
+			colonneDispo1.setPrefWidth(80);				colonneDispo1.setMaxWidth(80);
 
 			donneesDoc = FXCollections.observableArrayList(Catalogue.getInstance().getLstDoc());
 			colonneNum1.setCellValueFactory(new PropertyValueFactory<Document, String>("noDoc"));
@@ -256,12 +257,12 @@ public class Interface extends Application{
 			TableColumn<DVD, String> colonneRealis = new TableColumn<DVD, String> ("Réalisateur");
 			tableDvd.getColumns().addAll(colonneNum2, colonneTitre2, colonneParution2, colonneDispo2, colonneDisk, colonneRealis);
 			
-			colonneNum2.setPrefWidth(120);				colonneNum2.setMaxWidth(120);
-			colonneTitre2.setPrefWidth(120);			colonneTitre2.setMaxWidth(120);
+			colonneNum2.setPrefWidth(60);				colonneNum2.setMaxWidth(60);
+			colonneTitre2.setPrefWidth(310);			colonneTitre2.setMaxWidth(310);
 			colonneParution2.setPrefWidth(120);			colonneParution2.setMaxWidth(120);
-			colonneDispo2.setPrefWidth(120);			colonneDispo2.setMaxWidth(120);
+			colonneDispo2.setPrefWidth(80);				colonneDispo2.setMaxWidth(80);
 			colonneDisk.setPrefWidth(120);				colonneDisk.setMaxWidth(120);
-			colonneRealis.setPrefWidth(120);			colonneRealis.setMaxWidth(120);
+			colonneRealis.setPrefWidth(130);			colonneRealis.setMaxWidth(130);
 			
 			donneesDvd = FXCollections.observableArrayList(Catalogue.getInstance().getLstDvd());
 			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
@@ -290,21 +291,21 @@ public class Interface extends Application{
 			TableColumn<Livre, String> colonneAuteur = new TableColumn<Livre, String> ("Auteur");
 			tableLivre.getColumns().addAll(colonneNum3, colonneTitre3, colonneParution3, colonneDispo3,/* colonneMCle, */colonneAuteur);
 			
-			colonneNum3.setPrefWidth(120);				colonneNum3.setMaxWidth(120);
-			colonneTitre3.setPrefWidth(120);			colonneTitre3.setMaxWidth(120);
+			colonneNum3.setPrefWidth(60);				colonneNum3.setMaxWidth(60);
+			colonneTitre3.setPrefWidth(410);			colonneTitre3.setMaxWidth(410);
 			colonneParution3.setPrefWidth(120);			colonneParution3.setMaxWidth(120);
-			colonneDispo3.setPrefWidth(120);			colonneDispo3.setMaxWidth(120);
+			colonneDispo3.setPrefWidth(80);				colonneDispo3.setMaxWidth(80);
 //			colonneMCle.setPrefWidth(120);				colonneMCle.setMaxWidth(120);
-			colonneAuteur.setPrefWidth(120);			colonneAuteur.setMaxWidth(120);
+			colonneAuteur.setPrefWidth(150);			colonneAuteur.setMaxWidth(150);
 			
-			donneesLives = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
+			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
 			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
 			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
 			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
 			colonneDispo3.setCellValueFactory(new PropertyValueFactory<Livre, String>("disponible"));
 //			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
 			colonneAuteur.setCellValueFactory(new PropertyValueFactory<Livre, String>("auteur"));
-			tableLivre.setItems(donneesLives);
+			tableLivre.setItems(donneesLivres);
 			
 			tabLivre.setContent(tableLivre);
 			
@@ -324,12 +325,12 @@ public class Interface extends Application{
 			TableColumn<Periodique, Integer> colonnePerio = new TableColumn<Periodique, Integer> ("Numéro de périodique");
 			tablePerio.getColumns().addAll(colonneNum4, colonneTitre4, colonneParution4, colonneDispo4, colonneVol, colonnePerio);
 			
-			colonneNum4.setPrefWidth(120);				colonneNum4.setMaxWidth(120);
-			colonneTitre4.setPrefWidth(120);			colonneTitre4.setMaxWidth(120);
+			colonneNum4.setPrefWidth(60);				colonneNum4.setMaxWidth(60);
+			colonneTitre4.setPrefWidth(300);			colonneTitre4.setMaxWidth(300);
 			colonneParution4.setPrefWidth(120);			colonneParution4.setMaxWidth(120);
-			colonneDispo4.setPrefWidth(120);			colonneDispo4.setMaxWidth(120);
+			colonneDispo4.setPrefWidth(80);				colonneDispo4.setMaxWidth(80);
 			colonneVol.setPrefWidth(120);				colonneVol.setMaxWidth(120);
-			colonnePerio.setPrefWidth(130);				colonnePerio.setMaxWidth(130);
+			colonnePerio.setPrefWidth(140);				colonnePerio.setMaxWidth(150);
 			
 			donneesPerio = FXCollections.observableArrayList(Catalogue.getInstance().getLstPer());
 			colonneNum4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("noDoc"));
@@ -727,7 +728,7 @@ public class Interface extends Application{
 				colonneRetour.setPrefWidth(100);			colonneRetour.setMaxWidth(100);
 				colonneAmende.setPrefWidth(100);			colonneAmende.setMaxWidth(100);
 
-				donneesPrets = FXCollections.observableArrayList(Pret.getLstPrets());
+				donneesPrets = FXCollections.observableArrayList(ArchivePret.getInstance().getLstPrets());
 				colonneIdPret.setCellValueFactory(new PropertyValueFactory<Pret, String>("idPret"));
 				colonneEmpr.setCellValueFactory(new PropertyValueFactory<Pret, String>("dateEmprunt"));
 				colonneEmprID.setCellValueFactory(new PropertyValueFactory<Pret, String>("idAdherant"));
@@ -965,9 +966,10 @@ public class Interface extends Application{
 									Optional<ButtonType> retour = afficherBoiteInfo(16);
 								}
 								else {
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
-									ArchivePret.addCompteurIdPret();
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
+									
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);
@@ -979,9 +981,11 @@ public class Interface extends Application{
 									Optional<ButtonType> retour = afficherBoiteInfo(16);
 								}
 								else {
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
-									ArchivePret.addCompteurIdPret();
+
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
+
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);
@@ -993,9 +997,12 @@ public class Interface extends Application{
 									Optional<ButtonType> retour = afficherBoiteInfo(16);
 								}
 								else {
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
-									ArchivePret.addCompteurIdPret();
+
+									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
+
+
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);

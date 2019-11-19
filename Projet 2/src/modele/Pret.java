@@ -12,7 +12,7 @@ public class Pret {
 	private Date dateRetour; // même format que dateEmprunt
 	private double amende = 0;
 	
-	private static ArrayList<Pret> lstPrets = new ArrayList<Pret>();
+	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 	
 	public Pret(Date dateEmprunt, String idAdherant, String noDoc, String idPret) {
 		// TODO Auto-generated constructor stub
@@ -20,10 +20,6 @@ public class Pret {
 		this.idAdherant = idAdherant;
 		this.noDoc = noDoc;
 		this.idPret = idPret;
-		
-	}
-	
-	public Pret() {
 		
 	}
 
@@ -55,7 +51,7 @@ public class Pret {
 		return noDoc;
 	}
 
-	public static ArrayList<Pret> getLstPrets() {
+	public ArrayList<Pret> getLstPrets() {
 		return lstPrets;
 	}
 

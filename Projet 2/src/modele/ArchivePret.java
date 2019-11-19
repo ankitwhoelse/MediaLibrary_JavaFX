@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,8 +15,8 @@ public class ArchivePret implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private	static ArchivePret instance;
-	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
-	private static int compteurIdPret;
+	private ArrayList<Pret> lstPrets;
+	private int compteurIdPret;
 
 	public ArrayList<Pret> getLstPrets() {
 		return lstPrets;
@@ -28,16 +29,21 @@ public class ArchivePret implements Serializable{
 	
 	public ArchivePret() {
 		compteurIdPret = 1;
+		lstPrets = new ArrayList<Pret>();
 		
 		try {
-			FileInputStream fichier = new FileInputStream("archive.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
+			if (new File("archive.ser").exists()) {
+				FileInputStream fichier = new FileInputStream("archive.ser");
+				ObjectInputStream is = new ObjectInputStream(fichier);
+		
+				instance = (ArchivePret) is.readObject();
+				lstPrets = instance.getLstPrets();
+				System.out.println("désérialise archive prêt");
 	
-			instance = (ArchivePret) is.readObject();
-			System.out.println("désérialise archive prêt");
-
-			is.close();
-				
+				is.close();
+				fichier.close();
+			}
+		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -51,7 +57,7 @@ public class ArchivePret implements Serializable{
 	
 	public static ArchivePret getInstance() {
 		if (instance==null) {
-			instance=new ArchivePret();
+			instance=new ArchivePret(); System.out.println("l'instance archive est nulle");
 		}
 		return instance;
 	}
@@ -65,17 +71,18 @@ public class ArchivePret implements Serializable{
 			os.writeObject(instance);
 			
 			os.close();
+			fichier.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static int getCompteurIdPret() {
+	public int getCompteurIdPret() {
 		return compteurIdPret;
 	}
 
-	public static void addCompteurIdPret() {
+	public void addCompteurIdPret() {
 		compteurIdPret++;
 	}
 }
