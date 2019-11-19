@@ -49,7 +49,7 @@ public class ArchivePret implements Serializable{
 		}
 	}	
 	
-	public static ArchivePret getArchivePret() {
+	public static ArchivePret getInstance() {
 		if (instance==null) {
 			instance=new ArchivePret();
 		}

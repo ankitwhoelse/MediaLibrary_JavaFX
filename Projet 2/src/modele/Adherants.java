@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,20 +15,25 @@ public class Adherants implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private	static Adherants instance;
-	private static ArrayList<Adherant> lstAdherants = new ArrayList<>();
-	private static int compteurID;
+	private ArrayList<Adherant> lstAdherants;
+	private int compteurID;
 	
-	public Adherants() {
+	private Adherants() {
 		compteurID = 1;
+		lstAdherants = new ArrayList<Adherant>();
 		
 		try {
-			FileInputStream fichier = new FileInputStream("adherants.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
+			if(new File("adherants.ser").exists()) {
+				FileInputStream fichier = new FileInputStream("adherants.ser");
+				ObjectInputStream is = new ObjectInputStream(fichier);
 	
-			instance = (Adherants) is.readObject();
-			System.out.println("désérialise adherants");
+				instance = (Adherants) is.readObject();
+				lstAdherants = instance.getLstAdherants();
+				System.out.println("désérialise adherants");
 
-			is.close();
+				is.close();
+			}
+			
 				
 		} catch (FileNotFoundException e) {
 		//	e.printStackTrace();
@@ -42,30 +48,32 @@ public class Adherants implements Serializable{
 	
 	public static Adherants getInstance() {
 		if (instance==null) {
+			System.out.println("L'instance est nulle");
 			instance=new Adherants();
 		}
 		return instance;
 	}
 	
-	public static void addLstAdherant(Adherant adher) {
+	public void addLstAdherant(Adherant adher) {
 		lstAdherants.add(adher);
 	}
 	
-	public static void addCompteur() {
+	public void addCompteur() {
 		compteurID++;
 	}
 
-	public static ArrayList<Adherant> getLstAdherants() {
+	public ArrayList<Adherant> getLstAdherants() {
 		return lstAdherants;
 	}
 	
-	public static void serialiseAdherants() {
+	public void serialiseAdherants() {
 		try {
 			FileOutputStream fichier = new FileOutputStream("adherants.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);
 			
 			System.out.println("adherants sérialisation");
 			os.writeObject(instance);
+			System.out.println(instance.getLstAdherants() + "dans serialisation");
 			
 			os.close();
 			
@@ -74,7 +82,7 @@ public class Adherants implements Serializable{
 		}
 	}
 
-	public static int getCompteurID() {
+	public int getCompteurID() {
 		return compteurID;
 	}
 	

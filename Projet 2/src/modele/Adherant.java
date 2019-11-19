@@ -7,7 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
-public class Adherant extends Adherants implements Serializable{
+public class Adherant implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String strId;

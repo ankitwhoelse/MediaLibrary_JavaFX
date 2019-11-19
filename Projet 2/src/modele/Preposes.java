@@ -14,7 +14,7 @@ public class Preposes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private	static Preposes instance;
-	private static ArrayList<Prepose> lstPreposes = new ArrayList<>();
+	private ArrayList<Prepose> lstPreposes = new ArrayList<>();
 	
 	public Preposes() {
 		try {
@@ -37,18 +37,18 @@ public class Preposes implements Serializable{
 		}
 	}	
 	
-	public static Preposes getPreposes() {
+	public static Preposes getInstance() {
 		if (instance==null) {
 			instance = new Preposes();
 		}
 		return instance;
 	}
 	
-	public static void addLstPrepose(Prepose prep) {
+	public void addLstPrepose(Prepose prep) {
 		lstPreposes.add(prep);
 	}
 
-	public static ArrayList<Prepose> getLstPreposes() {
+	public ArrayList<Prepose> getLstPreposes() {
 		return lstPreposes;
 	}
 	
