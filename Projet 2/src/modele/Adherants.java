@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,46 +15,28 @@ public class Adherants implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private	static Adherants instance;
-	private static ArrayList<Adherant> lstAdherants = new ArrayList<>();
-	private static int compteurID;
+	private ArrayList<Adherant> lstAdherants;
+	private int compteurID;
 	
-	public Adherants() {
+	private Adherants() {
 		compteurID = 1;
-	}	
-	
-	public static Adherants getAdherants() {
-		if (instance==null) {
-			instance=new Adherants();
-		}
-		return instance;
-	}
-	
-	public static void addLstAdherant(Adherant adher) {
-		lstAdherants.add(adher);
-	}
-	
-	public static void addCompteur() {
-		compteurID++;
-	}
-
-	public static ArrayList<Adherant> getLstAdherants() {
-		return lstAdherants;
-	}
-
-	public Adherants deserialiseAdherants() {
-		Adherants adh = new Adherants();
+		lstAdherants = new ArrayList<Adherant>();
 		
 		try {
-			FileInputStream fichier = new FileInputStream("adherants.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
+			if(new File("adherants.ser").exists()) {
+				FileInputStream fichier = new FileInputStream("adherants.ser");
+				ObjectInputStream is = new ObjectInputStream(fichier);
 	
-			adh = (Adherants) is.readObject();
-			System.out.println("désérialise adherants");
+				instance = (Adherants) is.readObject();
+				lstAdherants = instance.getLstAdherants();
+				System.out.println("désérialise adherants");
 
-			is.close();
-				
+				is.close();
+				fichier.close();
+			}
+			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		//	e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (EOFException e) {
@@ -61,11 +44,28 @@ public class Adherants implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return adh;
+	}	
+	
+	public static Adherants getInstance() {
+		if (instance==null) {
+			instance=new Adherants(); System.out.println("L'instance adhérant est nulle");
+		}
+		return instance;
 	}
 	
-	public static void serialiseAdherants() {
+	public void addLstAdherant(Adherant adher) {
+		lstAdherants.add(adher);
+	}
+	
+	public void addCompteur() {
+		compteurID++;
+	}
+
+	public ArrayList<Adherant> getLstAdherants() {
+		return lstAdherants;
+	}
+	
+	public void serialiseAdherants() {
 		try {
 			FileOutputStream fichier = new FileOutputStream("adherants.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);
@@ -74,13 +74,14 @@ public class Adherants implements Serializable{
 			os.writeObject(instance);
 			
 			os.close();
+			fichier.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static int getCompteurID() {
+	public int getCompteurID() {
 		return compteurID;
 	}
 	

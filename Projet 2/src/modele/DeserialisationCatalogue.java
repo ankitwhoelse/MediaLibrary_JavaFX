@@ -11,7 +11,6 @@ public class DeserialisationCatalogue{
 	static Catalogue cat;
 	
 	public static void deserialiseCata() throws IOException {
-		// désérialiser le catalogue
 		
 		FileInputStream fichier = new FileInputStream("catalogue.ser");
 		ObjectInputStream is = new ObjectInputStream(fichier);
@@ -21,6 +20,7 @@ public class DeserialisationCatalogue{
 			System.out.println("désérialise catalogue");
 		
 			is.close();
+			fichier.close();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

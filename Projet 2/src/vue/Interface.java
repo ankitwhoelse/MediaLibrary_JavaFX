@@ -66,16 +66,23 @@ public class Interface extends Application{
 	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre, rbModifID, rbModifMDP;
 	Scene scene, scene2, scene3, scene4, scene5;
 	Stage stage2, stage3, stage4, stage5;
-	Tab tabUtil, tabPrepo, tabAdher, tabPrets, tabPrep;
-	final ObservableList<Pret> donneesPrets = FXCollections.observableArrayList(Pret.getLstPrets());
+	TabPane tabPane;
+	Tab tabDoc, tabLivre, tabDvd, tabPerio, tabUtil, tabPrepo, tabAdher, tabPrets, tabPrep;
+	ObservableList<Pret> donneesPrets;
 	final TableView<Pret> tablePrets = new TableView<Pret>();
 	final TableView<Prepose> tabPrepose = new TableView<Prepose>();
-	final ObservableList<Prepose> donneesPrep = FXCollections.observableArrayList(Preposes.getLstPreposes());
+	ObservableList<Prepose> donneesPrep;
 	final TableView<Adherant> tableUtilisateurs = new TableView<Adherant>();
-	final ObservableList<Adherant> donneesAdh = FXCollections.observableArrayList(Adherants.getLstAdherants());
+	ObservableList<Adherant> donneesAdh;
 	final TableView<Document> tableDoc = new TableView<Document>();
-	final ObservableList<Document> donneesDoc = FXCollections.observableArrayList(Catalogue.getLstDoc());
-
+	ObservableList<Document> donneesDoc;
+	final TableView<DVD> tableDvd = new TableView<DVD>();
+	ObservableList<DVD> donneesDvd;
+	final TableView<Periodique> tablePerio = new TableView<Periodique>();
+	ObservableList<Periodique> donneesPerio;
+	final TableView<Livre> tableLivre = new TableView<Livre>();
+	ObservableList<Livre> donneesLives;
+	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
 		try {
@@ -167,7 +174,7 @@ public class Interface extends Application{
 			stage2.setTitle("Mediatheque");
 			stage2.initModality(Modality.APPLICATION_MODAL);
 			
-			TabPane tabPane = new TabPane();
+			tabPane = new TabPane();
 			VBox vBox2 = new VBox();
 			vBox2.setSpacing(10);
 			VBox.setMargin(vBox2, new Insets(10));
@@ -184,6 +191,9 @@ public class Interface extends Application{
 			rbAuteur.setText("auteur");
 			rbMotsCles = new RadioButton();
 			rbMotsCles.setText("mots clés");
+			rbMotsCles.setDisable(true);
+			rbMotsCles.setOnAction(gc);
+			rbMotsCles.setOnAction(gc);
 			tgSearch.getToggles().addAll(rbAuteur, rbMotsCles);
 			
 			txtRecherche = new TextField("");
@@ -199,20 +209,16 @@ public class Interface extends Application{
 			HBox hBoxCata = new HBox();
 			hBoxCata.setSpacing(15);
 			
-			Catalogue cata = Catalogue.getCatalogue();
-			cata = DeserialisationCatalogue.getDeseriaCata();
-			Adherants adh = Adherants.getAdherants();
-			adh = adh.deserialiseAdherants();
-			Preposes preps = Preposes.getPreposes();
-			preps = preps.deserialisePreposes();
-			ArchivePret archive = ArchivePret.getArchivePret();
-			archive = archive.deserialiseArchivePret();
+			Catalogue cata = Catalogue.getInstance();
+			Adherants adh = Adherants.getInstance();
+			Preposes preps = Preposes.getInstance();
+			ArchivePret archive = ArchivePret.getInstance();
 			
 //				onglet documents
-			Tab tabDoc = new Tab();
+			tabDoc = new Tab();
 			tabDoc.setClosable(false);
 			tabDoc.setText("Documents");
-//			tabDoc.setGraphic(new ImageView(new Image("icon-collection.png")));
+//			tabDoc.setGraphic(new ImageView(new Image("images\\icon-collection.png")));
 			
 			TableColumn<Document, String> colonneNum1 = new TableColumn<Document, String> ("Numéro");
 			TableColumn<Document, String> colonneTitre1 = new TableColumn<Document, String> ("Titre");
@@ -220,11 +226,12 @@ public class Interface extends Application{
 			TableColumn<Document, String> colonneDispo1 = new TableColumn<Document, String> ("Disponible");
 			tableDoc.getColumns().addAll(colonneNum1, colonneTitre1, colonneParution1, colonneDispo1);
 			
-			colonneNum1.setPrefWidth(120);			colonneNum1.setMaxWidth(120);
+			colonneNum1.setPrefWidth(120);				colonneNum1.setMaxWidth(120);
 			colonneTitre1.setPrefWidth(120);			colonneTitre1.setMaxWidth(120);
 			colonneParution1.setPrefWidth(120);			colonneParution1.setMaxWidth(120);
 			colonneDispo1.setPrefWidth(120);			colonneDispo1.setMaxWidth(120);
 
+			donneesDoc = FXCollections.observableArrayList(Catalogue.getInstance().getLstDoc());
 			colonneNum1.setCellValueFactory(new PropertyValueFactory<Document, String>("noDoc"));
 			colonneTitre1.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
 			colonneParution1.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
@@ -235,12 +242,12 @@ public class Interface extends Application{
 			
 			
 	//			onglet dvd
-			Tab tabDvd = new Tab();
+			tabDvd = new Tab();
 			tabDvd.setClosable(false);
 			tabDvd.setText("DVD");
-//			tabDoc.setGraphic(new ImageView(new Image("icon-dvd.png")));
+//			tabDvd.setGraphic(new ImageView(new Image("images/icon-dvd.png")));
 			
-			final TableView<DVD> tableDvd = new TableView<DVD>();
+			
 			TableColumn<DVD, String> colonneNum2 = new TableColumn<DVD, String> ("Numéro");
 			TableColumn<DVD, String> colonneTitre2 = new TableColumn<DVD, String> ("Titre");
 			TableColumn<DVD, LocalDate> colonneParution2 = new TableColumn<DVD, LocalDate> ("Date de parution");
@@ -249,14 +256,14 @@ public class Interface extends Application{
 			TableColumn<DVD, String> colonneRealis = new TableColumn<DVD, String> ("Réalisateur");
 			tableDvd.getColumns().addAll(colonneNum2, colonneTitre2, colonneParution2, colonneDispo2, colonneDisk, colonneRealis);
 			
-			colonneNum2.setPrefWidth(120);			colonneNum2.setMaxWidth(120);
+			colonneNum2.setPrefWidth(120);				colonneNum2.setMaxWidth(120);
 			colonneTitre2.setPrefWidth(120);			colonneTitre2.setMaxWidth(120);
 			colonneParution2.setPrefWidth(120);			colonneParution2.setMaxWidth(120);
 			colonneDispo2.setPrefWidth(120);			colonneDispo2.setMaxWidth(120);
-			colonneDisk.setPrefWidth(120);			colonneDisk.setMaxWidth(120);
+			colonneDisk.setPrefWidth(120);				colonneDisk.setMaxWidth(120);
 			colonneRealis.setPrefWidth(120);			colonneRealis.setMaxWidth(120);
 			
-			final ObservableList<DVD> donneesDvd = FXCollections.observableArrayList(Catalogue.getLstDvd());
+			donneesDvd = FXCollections.observableArrayList(Catalogue.getInstance().getLstDvd());
 			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
 			colonneTitre2.setCellValueFactory(new PropertyValueFactory<>("titre"));
 			colonneParution2.setCellValueFactory(new PropertyValueFactory<>("dateParution"));
@@ -269,33 +276,33 @@ public class Interface extends Application{
 			
 						
 	//			onglet livre
-			Tab tabLivre = new Tab();
+			tabLivre = new Tab();
 			tabLivre.setClosable(false);
 			tabLivre.setText("Livre");
-	//		tabDoc.setGraphic(new ImageView(new Image("icon-livre.png")));
+//			tabLivre.setGraphic(new ImageView(new Image("images/icon-livre.png")));
 			
-			final TableView<Livre> tableLivre = new TableView<Livre>();
+			
 			TableColumn<Livre, String> colonneNum3 = new TableColumn<Livre, String> ("Numéro");
 			TableColumn<Livre, String> colonneTitre3 = new TableColumn<Livre, String> ("Titre");
 			TableColumn<Livre, LocalDate> colonneParution3 = new TableColumn<Livre, LocalDate> ("Date de parution");
 			TableColumn<Livre, String> colonneDispo3 = new TableColumn<Livre, String> ("Disponible");
-			TableColumn<Livre, Integer> colonneMCle = new TableColumn<Livre, Integer> ("Mots clés");
+//			TableColumn<Livre, Integer> colonneMCle = new TableColumn<Livre, Integer> ("Mots clés");
 			TableColumn<Livre, String> colonneAuteur = new TableColumn<Livre, String> ("Auteur");
-			tableLivre.getColumns().addAll(colonneNum3, colonneTitre3, colonneParution3, colonneDispo3, colonneMCle, colonneAuteur);
+			tableLivre.getColumns().addAll(colonneNum3, colonneTitre3, colonneParution3, colonneDispo3,/* colonneMCle, */colonneAuteur);
 			
-			colonneNum3.setPrefWidth(120);			colonneNum3.setMaxWidth(120);
+			colonneNum3.setPrefWidth(120);				colonneNum3.setMaxWidth(120);
 			colonneTitre3.setPrefWidth(120);			colonneTitre3.setMaxWidth(120);
 			colonneParution3.setPrefWidth(120);			colonneParution3.setMaxWidth(120);
 			colonneDispo3.setPrefWidth(120);			colonneDispo3.setMaxWidth(120);
-			colonneMCle.setPrefWidth(120);			colonneMCle.setMaxWidth(120);
+//			colonneMCle.setPrefWidth(120);				colonneMCle.setMaxWidth(120);
 			colonneAuteur.setPrefWidth(120);			colonneAuteur.setMaxWidth(120);
 			
-			final ObservableList<Livre> donneesLives = FXCollections.observableArrayList(Catalogue.getLstLvr());
+			donneesLives = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
 			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
 			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
 			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
 			colonneDispo3.setCellValueFactory(new PropertyValueFactory<Livre, String>("disponible"));
-			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
+//			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
 			colonneAuteur.setCellValueFactory(new PropertyValueFactory<Livre, String>("auteur"));
 			tableLivre.setItems(donneesLives);
 			
@@ -303,12 +310,12 @@ public class Interface extends Application{
 			
 			
 	//			onglet periodique
-			Tab tabPerio = new Tab();
+			tabPerio = new Tab();
 			tabPerio.setClosable(false);
 			tabPerio.setText("Périodique");
-	//		tabDoc.setGraphic(new ImageView(new Image("icon-livre.png")));
+//			tabPerio.setGraphic(new ImageView(new Image("images/icon-livre.png")));
 			
-			final TableView<Periodique> tablePerio = new TableView<Periodique>();
+			
 			TableColumn<Periodique, String> colonneNum4 = new TableColumn<Periodique, String> ("Numéro");
 			TableColumn<Periodique, String> colonneTitre4 = new TableColumn<Periodique, String> ("Titre");
 			TableColumn<Periodique, LocalDate> colonneParution4 = new TableColumn<Periodique, LocalDate> ("Date de parution");
@@ -317,14 +324,14 @@ public class Interface extends Application{
 			TableColumn<Periodique, Integer> colonnePerio = new TableColumn<Periodique, Integer> ("Numéro de périodique");
 			tablePerio.getColumns().addAll(colonneNum4, colonneTitre4, colonneParution4, colonneDispo4, colonneVol, colonnePerio);
 			
-			colonneNum4.setPrefWidth(120);			colonneNum4.setMaxWidth(120);
+			colonneNum4.setPrefWidth(120);				colonneNum4.setMaxWidth(120);
 			colonneTitre4.setPrefWidth(120);			colonneTitre4.setMaxWidth(120);
 			colonneParution4.setPrefWidth(120);			colonneParution4.setMaxWidth(120);
 			colonneDispo4.setPrefWidth(120);			colonneDispo4.setMaxWidth(120);
-			colonneVol.setPrefWidth(120);			colonneVol.setMaxWidth(120);
-			colonnePerio.setPrefWidth(130);			colonnePerio.setMaxWidth(130);
+			colonneVol.setPrefWidth(120);				colonneVol.setMaxWidth(120);
+			colonnePerio.setPrefWidth(130);				colonnePerio.setMaxWidth(130);
 			
-			final ObservableList<Periodique> donneesPerio = FXCollections.observableArrayList(Catalogue.getLstPer());
+			donneesPerio = FXCollections.observableArrayList(Catalogue.getInstance().getLstPer());
 			colonneNum4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("noDoc"));
 			colonneTitre4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("titre"));
 			colonneParution4.setCellValueFactory(new PropertyValueFactory<Periodique, LocalDate>("dateParution"));
@@ -345,10 +352,7 @@ public class Interface extends Application{
 			if (true) {			// if logged in comme admin	ou prepose
 			//			onglet utilisateurs
 				
-				
 				// SECTION POUR GERER LES ADHÉRANTS
-				
-				
 				tabUtil.setClosable(false);
 				tabUtil.setText("Adhérants");
 				
@@ -363,14 +367,14 @@ public class Interface extends Application{
 				TableColumn<Adherant, String> colonneAdresse = new TableColumn<Adherant, String>("Adresse");
 				tableUtilisateurs.getColumns().addAll(colonneId, colonneNom, colonnePrenom, colonneNumTel, colonneAdresse);
 				
-//				if (!adh.getLstAdherants().isEmpty() ) {
+				donneesAdh = FXCollections.observableArrayList(Adherants.getInstance().getLstAdherants());
 				colonneId.setCellValueFactory(new PropertyValueFactory<Adherant, String> ("strId"));
 				colonneNom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("nom"));
 				colonnePrenom.setCellValueFactory(new PropertyValueFactory<Adherant, String>("prenom"));
 				colonneNumTel.setCellValueFactory(new PropertyValueFactory<Adherant, String>("numTelephone"));
 				colonneAdresse.setCellValueFactory(new PropertyValueFactory<Adherant, String>("adresse"));
 				tableUtilisateurs.setItems(donneesAdh);
-//				}
+
 				GridPane gbModifU = new GridPane();
 				gbModifU.setHgap(5);
 				gbModifU.setVgap(5);
@@ -407,7 +411,9 @@ public class Interface extends Application{
 					txtA = new Text("Adresse");
 					tbA = new TextField();
 					txtT = new Text("Téléphone");
-					tbT = new TextField();
+					tbT = new TextField();					
+//					MaskedTextField text = new MaskedTextField("(###) ###-####");
+//					text.setPlaceholder(' ');
 					
 					gpAddUser.add(txtId, 0, 0);					gpAddUser.add(tbID, 1, 0);
 					gpAddUser.add(txtP, 0, 1);					gpAddUser.add(tbP, 1, 1);
@@ -427,10 +433,12 @@ public class Interface extends Application{
 							String prenom = tbP.getText().trim();
 							String adresse = tbA.getText().trim();
 							String telephone = tbT.getText().trim();
-							Adherant adher = new Adherant("adher" + Adherants.getCompteurID(),telephone, nom, prenom, adresse);
-							Adherants.addCompteur();
+							Adherant adher = new Adherant("adher" + Adherants.getInstance().getCompteurID(),prenom, nom, adresse, telephone);
+							Adherants.getInstance().addCompteur();
 							
-							Adherants.addLstAdherant(adher);
+							Adherants.getInstance().addLstAdherant(adher);
+							System.out.println(Adherants.getInstance().getLstAdherants());
+							System.out.println("allo");
 							donneesAdh.add(adher);
 							
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
@@ -474,8 +482,6 @@ public class Interface extends Application{
 				
 				
 				// SECTION POUR GERER LES PREPOSES
-				
-				
 				tabPrep.setClosable(false);
 				tabPrep.setText("Préposés");
 				
@@ -487,12 +493,11 @@ public class Interface extends Application{
 				TableColumn<Prepose, String> colonneMotDePasse = new TableColumn<Prepose, String>("Mot de passe");
 				tabPrepose.getColumns().addAll(colonneIdPrep, colonneMotDePasse);
 				
-//				if (!preps.getLstPreposes().isEmpty()) {
-//				System.out.println("la liste n'est pas vide");
+				donneesPrep = FXCollections.observableArrayList(Preposes.getInstance().getLstPreposes());
 				colonneIdPrep.setCellValueFactory(new PropertyValueFactory<Prepose, String> ("id"));
 				colonneMotDePasse.setCellValueFactory(new PropertyValueFactory<Prepose, String> ("MotDePasse"));
 				tabPrepose.setItems(donneesPrep);
-//				}
+
 				GridPane gbModifPrep = new GridPane();
 				gbModifPrep.setHgap(5);
 				gbModifPrep.setVgap(5);
@@ -514,19 +519,7 @@ public class Interface extends Application{
 					VBox.setMargin(vBoxAjPrep1, new Insets(20));
 					vBoxAjPrep1.setPadding(new Insets(10));
 					
-					Text txtAjUPrep1 = new Text("Informations du préposé");
-//					ToggleGroup tgAjoutCata = new ToggleGroup();
-//					rbAjoutAdh = new RadioButton("Adhérant");
-//					rbAjoutAdh.setOnAction(gc);
-//					rbAjoutAdh.setSelected(true);
-//					rbAjoutPre = new RadioButton("Préposé");
-//					rbAjoutPre.setOnAction(gc);
-//					tgAjoutCata.getToggles().addAll(rbAjoutAdh,rbAjoutPre);
-					
-//					HBox hBoxAjU1 = new HBox();
-//					hBoxAjU1.getChildren().addAll(rbAjoutAdh, rbAjoutPre);
-//					hBoxAjU1.setSpacing(25);
-					
+					Text txtAjUPrep1 = new Text("Informations du préposé");				
 					GridPane gpAddPrep = new GridPane();
 					gpAddPrep.setHgap(5);
 					gpAddPrep.setVgap(5);
@@ -549,7 +542,7 @@ public class Interface extends Application{
 							String MotDePasse = tbMDP.getText().trim();
 							Prepose prep = new Prepose(ID, MotDePasse);
 							
-							Preposes.addLstPrepose(prep);
+							Preposes.getInstance().addLstPrepose(prep);
 							donneesPrep.add(prep);
 							
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
@@ -563,7 +556,7 @@ public class Interface extends Application{
 					btnPrepQuit.setOnAction(e -> stage5.close());
 					hBoxAjUPrep2.getChildren().addAll(btnPrepConfir, btnPrepQuit);
 					hBoxAjUPrep2.setSpacing(15);
-					vBoxAjPrep1.getChildren().addAll(txtAjUPrep1,/* hBoxAjU1,*/ gpAddPrep, hBoxAjUPrep2);
+					vBoxAjPrep1.getChildren().addAll(txtAjUPrep1, gpAddPrep, hBoxAjUPrep2);
 					vBoxAjPrep1.setSpacing(10);
 					
 					scene5 = new Scene(vBoxAjPrep1, 350, 250);
@@ -579,7 +572,7 @@ public class Interface extends Application{
 				btnModifConfirmPrep.setDisable(true);
 				
 				gbModifPrep.add(txtModifPrep, 0, 0, 2, 1);
-				gbModifPrep.add(btnAjoutPrep, 0, 1, 1, 1);				gbModifPrep.add(btnSupprPrep, 1, 1, 1, 1);
+				gbModifPrep.add(btnAjoutPrep, 0, 1, 1, 1);			gbModifPrep.add(btnSupprPrep, 1, 1, 1, 1);
 				gbModifPrep.add(txtModifPrep2, 0, 2, 2, 1);
 				gbModifPrep.add(rbModifID, 0, 3, 1, 1);				gbModifPrep.add(rbModifMDP, 1, 3, 1, 1);
 				gbModifPrep.add(tbModifPrep, 0, 4, 2, 1);
@@ -592,7 +585,7 @@ public class Interface extends Application{
 			if (true) {			// if logged in comme preposé
 			//			onglet catalogue
 				tabPrepo.setClosable(false);
-				tabPrepo.setText("Catalolgue");
+				tabPrepo.setText("Catalogue");
 				
 				HBox hBoxCatal = new HBox();
 				hBoxCatal.setSpacing(20);
@@ -605,13 +598,12 @@ public class Interface extends Application{
 				TableColumn<Document, String> colonneNumDi = new TableColumn<Document, String>("Disponibilite");
 				tableCatalogue.getColumns().addAll(colonneNo, colonneTi, colonneDP, colonneNumDi);
 				
-				final ObservableList<Document> donneesCata = FXCollections.observableArrayList(Catalogue.getLstDoc());
+
 				colonneNo.setCellValueFactory(new PropertyValueFactory<Document, String> ("noDoc"));
 				colonneTi.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
 				colonneDP.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
 				colonneNumDi.setCellValueFactory(new PropertyValueFactory<Document, String>("disponible"));
-				tableCatalogue.setItems(donneesCata);
-				
+				tableCatalogue.setItems(donneesDoc);
 				
 				
 				GridPane gbModifC = new GridPane();
@@ -629,6 +621,7 @@ public class Interface extends Application{
 				tabPrepo.setContent(hBoxCatal);
 			}
 			
+//					FENÊTRE DE AJOUT DE DOCUMENT DANS LE CATALOGUE
 					VBox vBoxAj1 = new VBox();
 					VBox.setMargin(vBoxAj1, new Insets(20));
 					vBoxAj1.setPadding(new Insets(10));
@@ -665,9 +658,9 @@ public class Interface extends Application{
 					GridPane gpAj = new GridPane();
 					gpAj.setHgap(5);
 					gpAj.setVgap(5);
-					gpAj.add(txtAjTitr, 0, 0);					gpAj.add(tbAjTitr, 1, 0);
-					gpAj.add(txtAjDate, 0, 1);					gpAj.add(tbAjDate, 1, 1);
-					gpAj.add(txtAjMC, 0, 2);					gpAj.add(tbAjMC, 1, 2);
+					gpAj.add(txtAjTitr, 0, 0);				gpAj.add(tbAjTitr, 1, 0);
+					gpAj.add(txtAjDate, 0, 1);				gpAj.add(tbAjDate, 1, 1);
+					gpAj.add(txtAjMC, 0, 2);				gpAj.add(tbAjMC, 1, 2);
 					gpAj.add(txtAj2, 0, 3);					gpAj.add(tbAj2, 1, 3);
 					gpAj.add(txtAj3, 0, 4);					gpAj.add(tbAj3, 1, 4);
 					
@@ -695,10 +688,18 @@ public class Interface extends Application{
 				VBox vBoxUtil = new VBox();
 			
 				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: ");	// ajoute + nom du adherant
+				txtUtil.setText("Utilisateur: " + txtPrenom.getText() + txtNom.getText());
+				Adherant adhLogin = null;
+				for (Adherant adher : Adherants.getInstance().getLstAdherants()) {
+					if (adher.getNom().compareToIgnoreCase(txtPrenom.getText())==0)
+						adhLogin = adher;
+				}
+//				Text txtAdhAdr = new Text(adhLogin.getAdresse());
+//				Text txtAdhTel = new Text(adhLogin.getNumTelephone());
+				
 				VBox.setMargin(txtUtil, new Insets(10));
 				
-				vBoxUtil.getChildren().addAll(txtUtil);
+				vBoxUtil.getChildren().addAll(txtUtil/*, txtAdhAdr, txtAdhTel*/);
 				tabAdher.setContent(vBoxUtil);
 			}
 			
@@ -719,13 +720,14 @@ public class Interface extends Application{
 				TableColumn<Pret, Number> colonneAmende = new TableColumn<Pret, Number> ("Amende");
 				tablePrets.getColumns().addAll(colonneIdPret,colonneEmpr, colonneEmprID, colonneNum5, colonneRetour,colonneAmende);
 				
-				colonneIdPret.setPrefWidth(100);				colonneIdPret.setMaxWidth(100);
+				colonneIdPret.setPrefWidth(100);			colonneIdPret.setMaxWidth(100);
 				colonneEmpr.setPrefWidth(100);				colonneEmpr.setMaxWidth(100);
-				colonneEmprID.setPrefWidth(100);				colonneEmprID.setMaxWidth(100);
+				colonneEmprID.setPrefWidth(100);			colonneEmprID.setMaxWidth(100);
 				colonneNum5.setPrefWidth(100);				colonneNum5.setMaxWidth(100);
-				colonneRetour.setPrefWidth(100);				colonneRetour.setMaxWidth(100);
-				colonneAmende.setPrefWidth(100);				colonneAmende.setMaxWidth(100);
+				colonneRetour.setPrefWidth(100);			colonneRetour.setMaxWidth(100);
+				colonneAmende.setPrefWidth(100);			colonneAmende.setMaxWidth(100);
 
+				donneesPrets = FXCollections.observableArrayList(Pret.getLstPrets());
 				colonneIdPret.setCellValueFactory(new PropertyValueFactory<Pret, String>("idPret"));
 				colonneEmpr.setCellValueFactory(new PropertyValueFactory<Pret, String>("dateEmprunt"));
 				colonneEmprID.setCellValueFactory(new PropertyValueFactory<Pret, String>("idAdherant"));
@@ -772,13 +774,13 @@ public class Interface extends Application{
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
 			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); 
-				SerialisationCatalogue.serialiseCata(); Adherants.serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
+				SerialisationCatalogue.serialiseCata(); Adherants.getInstance().serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
 			btnFermer.setText("Fermer le catalogue");
 			btnFermer.setOnAction(e -> {stage2.close();
-			SerialisationCatalogue.serialiseCata(); Adherants.serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
+			SerialisationCatalogue.serialiseCata(); Adherants.getInstance().serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
 			HBox.setMargin(btnFermer, new Insets(10));
 					
 			hBoxBtn.getChildren().addAll(btnQuit, btnFermer);
@@ -891,17 +893,6 @@ public class Interface extends Application{
 			if(e.getSource() == btnAjoutPrep) {
 				stage5.showAndWait();
 			}
-		
-////				ENSEMBLE DE RADIO BUTTONS DE AJOUT DE UTILISATEURS
-//			if (rbAjoutAdh.isSelected()) {
-//				txtP.setText("Prénom"); tbID.setDisable(true);
-//				tbN.setVisible(true); tbA.setVisible(true); tbT.setVisible(true);
-//				txtN.setVisible(true); txtA.setVisible(true); txtT.setVisible(true);
-//			} else if (rbAjoutPre.isSelected()) {
-//				txtP.setText("Mot de passe"); tbID.setDisable(false);
-//				tbN.setVisible(false); tbA.setVisible(false); tbT.setVisible(false);
-//				txtN.setVisible(false); txtA.setVisible(false); txtT.setVisible(false);
-//			}
 			
 //				ENSEMBLE DE RADIO BUTTON DE MODIFICATION DES INFORMATIONS DES ADHÉRANTS
 			if (rbModifAdr.isSelected()) {
@@ -927,16 +918,16 @@ public class Interface extends Application{
 			}
 			
 //				ENSEMBLE RADIO BUTTON DE AJOUTER AU CATALOGUE
-//			if (rbAjoutL.isSelected()) {
-//				txtAj2.setText("Auteur");
-//				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(false); tbAj3.setVisible(false);
-//			} else if (rbAjoutD.isSelected()) {
-//				txtAj2.setText("Réalisateur"); txtAj3.setText("Nombre de disques");
-//				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
-//			} else if (rbAjoutP.isSelected()) {
-//				txtAj2.setText("Numéro de volume"); txtAj3.setText("Numéro de périodique");
-//				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
-//			}
+			if (rbAjoutL.isSelected()) {
+				txtAj2.setText("Auteur");
+				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(false); tbAj3.setVisible(false);
+			} else if (rbAjoutD.isSelected()) {
+				txtAj2.setText("Réalisateur"); txtAj3.setText("Nombre de disques");
+				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
+			} else if (rbAjoutP.isSelected()) {
+				txtAj2.setText("Numéro de volume"); txtAj3.setText("Numéro de périodique");
+				txtAj2.setVisible(true); tbAj2.setVisible(true);txtAj3.setVisible(true); tbAj3.setVisible(true);
+			}
 	
 //			BOUTON POUR EMPRUNTER UN DOCUMENT
 			if(e.getSource() == btnEmprunter) {
@@ -949,7 +940,7 @@ public class Interface extends Application{
 					boolean booIDOK = EmpruntIdOK(IDdoc, IDAdher);
 					if(booIDOK) {
 						boolean booAmendeok = true;
-						boolean booDocDispo = getDoc(IDdoc).getDisponible();;
+						boolean booDocDispo = getDoc(IDdoc).getDisponible();
 						boolean dispoAmendeok;
 						
 						dispoAmendeok = booAmendeok & booDocDispo;
@@ -976,6 +967,7 @@ public class Interface extends Application{
 								else {
 									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
 									ArchivePret.addCompteurIdPret();
+									ArchivePret.getInstance().addLstPrets(pret);
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);
@@ -989,6 +981,7 @@ public class Interface extends Application{
 								else {
 									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
 									ArchivePret.addCompteurIdPret();
+									ArchivePret.getInstance().addLstPrets(pret);
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);
@@ -1002,6 +995,7 @@ public class Interface extends Application{
 								else {
 									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getCompteurIdPret());
 									ArchivePret.addCompteurIdPret();
+									ArchivePret.getInstance().addLstPrets(pret);
 									adherant.addPret(pret);
 									getDoc(IDdoc).setDisponible(false);
 									donneesPrets.add(pret);
@@ -1151,7 +1145,7 @@ public class Interface extends Application{
 				Prepose prep = tabPrepose.getSelectionModel().getSelectedItem();
 				if(prep != null) {
 					donneesPrep.remove(prep);
-					Preposes.getLstPreposes().remove(prep);
+					Preposes.getInstance().getLstPreposes().remove(prep);
 					Optional<ButtonType> retour = afficherBoiteInfo(26);
 				}
 				else {
@@ -1164,7 +1158,7 @@ public class Interface extends Application{
 				Adherant adher = tableUtilisateurs.getSelectionModel().getSelectedItem();
 				if(adher != null) {
 					donneesPrep.remove(adher);
-					Adherants.getLstAdherants().remove(adher);
+					Adherants.getInstance().getLstAdherants().remove(adher);
 					Optional<ButtonType> retour = afficherBoiteInfo(27);
 				}
 				else {
@@ -1178,6 +1172,13 @@ public class Interface extends Application{
 					Optional<ButtonType> retour = afficherBoiteInfo(11);
 				}
 			}
+//			ENABLE/DISABLE RADIO BUTTON DE MOTS CLÉS
+			if (tabPane.getSelectionModel().getSelectedItem() == tabLivre) {
+				rbAuteur.setSelected(true);
+				rbMotsCles.setDisable(false);
+			} else
+				rbMotsCles.setDisable(true);
+			
 		}
 	}
 	
@@ -1346,7 +1347,7 @@ public class Interface extends Application{
 	public boolean connectedPrepose(String ID, String strMotDePasse) {
 		boolean ok = false; 
 		
-		for(Prepose prep: Preposes.getLstPreposes()) {
+		for(Prepose prep: Preposes.getInstance().getLstPreposes()) {
 			if((ID.compareTo(prep.getId()) == 0) && (strMotDePasse.compareTo(prep.getMotDePasse()) == 0)) {
 				ok = true;
 			}
@@ -1358,7 +1359,7 @@ public class Interface extends Application{
 	public boolean connectedAdherant(String nom, String prenom, String tel) {
 		boolean ok = false;
 		
-		for(Adherant adher: Adherants.getLstAdherants()) {
+		for(Adherant adher: Adherants.getInstance().getLstAdherants()) {
 			if((nom.compareTo(adher.getNom()) == 0)&&(prenom.compareTo(adher.getPrenom()) == 0)&&(tel.compareTo(adher.getNumTelephone()) == 0)) {
 				ok = true;
 			}
@@ -1373,13 +1374,13 @@ public class Interface extends Application{
 		boolean adhe = false;
 		boolean doc = false;
 		
-		for(Adherant adher: Adherants.getLstAdherants()) {
+		for(Adherant adher: Adherants.getInstance().getLstAdherants()) {
 			if(idAdher.compareTo(adher.getStrId()) == 0) {
 				adhe = true;
 			}
 		}
 		
-		for(Document document : Catalogue.getLstDoc()) {
+		for(Document document : Catalogue.getInstance().getLstDoc()) {
 			if(idDoc.compareTo(document.getNoDoc()) == 0) {
 				doc = true;
 			}
@@ -1394,19 +1395,19 @@ public class Interface extends Application{
 	public String TypeDocument(String idDoc) {
 		String type = "";
 		
-		for(Document document: Catalogue.getLstDvd()) {
+		for(Document document: Catalogue.getInstance().getLstDvd()) {
 			if(idDoc.compareTo(document.getNoDoc()) == 0) {
 				type = "dvd";
 			}
 		}
 		
-		for(Document document: Catalogue.getLstLvr()) {
+		for(Document document: Catalogue.getInstance().getLstLvr()) {
 			if(idDoc.compareTo(document.getNoDoc()) == 0) {
 				type = "lvr";
 			}
 		}
 		
-		for(Document document : Catalogue.getLstPer()) {
+		for(Document document : Catalogue.getInstance().getLstPer()) {
 			if(idDoc.compareTo(document.getNoDoc()) == 0) {
 				type = "per";
 			}
@@ -1418,7 +1419,7 @@ public class Interface extends Application{
 //	TROUVER LE NOMBRE DE PRÊT D'UN MÊME TYPE DE DOCUMENT
 	public int NombreEmprunter(String idAdher, String typeDoc) {
 		int Compteur = 0;
-		for(Adherant adher: Adherants.getLstAdherants()) {
+		for(Adherant adher: Adherants.getInstance().getLstAdherants()) {
 			for(Pret pret : adher.getLstPrets()) {
 				if(typeDoc.compareTo(TypeDocument(pret.getNoDoc())) == 0) {
 					Compteur++;
@@ -1432,7 +1433,7 @@ public class Interface extends Application{
 // TROUVER UN ADHERANT A PARTIR DE SON ID	
 	public Adherant getAdherant(String idAdher) {
 		Adherant adher = null;
-		for(Adherant adherant: Adherants.getLstAdherants()) {
+		for(Adherant adherant: Adherants.getInstance().getLstAdherants()) {
 			if(idAdher.compareTo(adherant.getStrId()) == 0) {
 				adher = adherant;
 			}
@@ -1443,7 +1444,7 @@ public class Interface extends Application{
 //	TROUVER UN DOCUMENT A PARTIR DE SON ID
 	public Document getDoc(String idDoc) {
 		Document doc = null;
-		for(Document document: Catalogue.getLstDoc()) {
+		for(Document document: Catalogue.getInstance().getLstDoc()) {
 			if(idDoc.compareTo(document.getNoDoc()) == 0) {
 				doc = document;
 			}
@@ -1454,7 +1455,7 @@ public class Interface extends Application{
 //	TROUVER UN PREPOSE A PARTIR DE SON ID
 	public Prepose getPrepose(String idPrep) {
 		Prepose prep = null;
-		for(Prepose prepose: Preposes.getLstPreposes()) {
+		for(Prepose prepose: Preposes.getInstance().getLstPreposes()) {
 			if(idPrep.compareTo(prepose.getId()) == 0) {
 				prep = prepose;
 			}

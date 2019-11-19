@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,39 +15,24 @@ public class Preposes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private	static Preposes instance;
-	private static ArrayList<Prepose> lstPreposes = new ArrayList<>();
+	private ArrayList<Prepose> lstPreposes;
 	
 	public Preposes() {
-		
-	}	
-	
-	public static Preposes getPreposes() {
-		if (instance==null) {
-			instance = new Preposes();
-		}
-		return instance;
-	}
-	
-	public static void addLstPrepose(Prepose prep) {
-		lstPreposes.add(prep);
-	}
-
-	public static ArrayList<Prepose> getLstPreposes() {
-		return lstPreposes;
-	}
-
-	public Preposes deserialisePreposes() {
-		Preposes adh = new Preposes();
+		lstPreposes = new ArrayList<Prepose>();
 		
 		try {
-			FileInputStream fichier = new FileInputStream("preposes.ser");
-			ObjectInputStream is = new ObjectInputStream(fichier);
+			if (new File("preposes.ser").exists()) {
+				FileInputStream fichier = new FileInputStream("preposes.ser");
+				ObjectInputStream is = new ObjectInputStream(fichier);
+		
+				instance = (Preposes) is.readObject();
+				lstPreposes = instance.getLstPreposes();
+				System.out.println("désérialise preposes");
 	
-			adh = (Preposes) is.readObject();
-			System.out.println("désérialise preposes");
-
-			is.close();
-				
+				is.close();
+				fichier.close();
+			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -56,8 +42,21 @@ public class Preposes implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return adh;
+	}	
+	
+	public static Preposes getInstance() {
+		if (instance==null) {
+			instance = new Preposes(); System.out.println("Instance préposé == null");
+		}
+		return instance;
+	}
+	
+	public void addLstPrepose(Prepose prep) {
+		lstPreposes.add(prep);
+	}
+
+	public ArrayList<Prepose> getLstPreposes() {
+		return lstPreposes;
 	}
 	
 	public static void serialisePreposes() {
@@ -69,6 +68,7 @@ public class Preposes implements Serializable{
 			os.writeObject(instance);
 			
 			os.close();
+			fichier.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
