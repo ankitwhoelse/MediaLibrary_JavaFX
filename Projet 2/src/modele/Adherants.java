@@ -32,9 +32,9 @@ public class Adherants implements Serializable{
 				System.out.println("désérialise adherants");
 
 				is.close();
+				fichier.close();
 			}
 			
-				
 		} catch (FileNotFoundException e) {
 		//	e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -48,8 +48,7 @@ public class Adherants implements Serializable{
 	
 	public static Adherants getInstance() {
 		if (instance==null) {
-			System.out.println("L'instance est nulle");
-			instance=new Adherants();
+			instance=new Adherants(); System.out.println("L'instance adhérant est nulle");
 		}
 		return instance;
 	}
@@ -73,9 +72,9 @@ public class Adherants implements Serializable{
 			
 			System.out.println("adherants sérialisation");
 			os.writeObject(instance);
-			System.out.println(instance.getLstAdherants() + "dans serialisation");
 			
 			os.close();
+			fichier.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

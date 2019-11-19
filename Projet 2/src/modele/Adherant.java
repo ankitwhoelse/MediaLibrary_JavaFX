@@ -3,20 +3,14 @@ package modele;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
-
 public class Adherant implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String strId;
-	private String numTelephone;// FORMAT: (000) 000-0000
-	private String nom;
 	private String prenom;
+	private String nom;
 	private String adresse;
-	//private ArrayList<Pret> Prets = ArrayList<Pret>();
-//	private ListView<Pret> lstPrets = new ListView<>(Prets);
+	private String numTelephone;// FORMAT: (000) 000-0000
 	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 
 	public String getStrId() {
@@ -41,10 +35,6 @@ public class Adherant implements Serializable{
 	public ArrayList<Pret> getPrets() {
 		return lstPrets;
 	}
-
-//	public ListView<Pret> getLstPrets() {
-//		return lstPrets;
-//	}
 	
 	public void setStrId(String strId) {
 		this.strId = strId;
@@ -75,7 +65,7 @@ public class Adherant implements Serializable{
 		lstPrets.add(pret);
 	}
 
-	public Adherant(String strId, String numTelephone, String nom, String prenom, String adresse) {
+	public Adherant(String strId, String prenom, String nom, String adresse, String numTelephone) {
 		this.strId = strId;
 		this.numTelephone = numTelephone;
 		this.nom = nom;

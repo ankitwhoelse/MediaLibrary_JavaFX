@@ -9,7 +9,7 @@ public class SerialisationCatalogue {
 	public static void serialiseCata() {
 		//Sérialisation du catalogue
 		
-		Catalogue cat = Catalogue.getCatalogue();
+		Catalogue cat = Catalogue.getInstance();
 		
 		try {
 			FileOutputStream fichier = new FileOutputStream("catalogue.ser");
@@ -19,6 +19,7 @@ public class SerialisationCatalogue {
 			os.writeObject(cat);
 			
 			os.close();
+			fichier.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
