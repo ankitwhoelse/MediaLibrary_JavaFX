@@ -41,7 +41,7 @@ public final class Catalogue implements Serializable {
 				String noDoc = st.nextToken().trim();
 				String titre = st.nextToken().trim();
 				LocalDate dateParution = LocalDate.parse(st.nextToken().trim(), formatter);
-				String disponible = null;
+				boolean disponible = true;
 				String motsCles = null; 
 				String auteur = st.nextToken().trim();
 				
@@ -59,7 +59,7 @@ public final class Catalogue implements Serializable {
 				String noDoc = st.nextToken().trim();
 				String titre = st.nextToken().trim();
 				LocalDate dateParution = LocalDate.parse(st.nextToken().trim(), formatter);
-				String disponible = null;
+				boolean disponible = true;
 				int nbDisques = Integer.parseInt(st.nextToken().trim()); 
 				String strRealisateur = st.nextToken().trim();
 				
@@ -76,7 +76,7 @@ public final class Catalogue implements Serializable {
 				String noDoc = st.nextToken().trim();
 				String titre = st.nextToken().trim();
 				LocalDate dateParution = LocalDate.parse(st.nextToken().trim(), formatter);
-				String disponible = null;
+				boolean disponible = true;
 				int noVolume = Integer.parseInt(st.nextToken().trim());
 				int noPeriodique = Integer.parseInt(st.nextToken().trim());
 				

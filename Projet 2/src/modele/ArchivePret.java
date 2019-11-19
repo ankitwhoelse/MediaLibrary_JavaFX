@@ -15,6 +15,7 @@ public class ArchivePret implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private	static ArchivePret instance;
 	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
+	private static int compteurIdPret;
 
 	public ArrayList<Pret> getLstPrets() {
 		return lstPrets;
@@ -26,7 +27,7 @@ public class ArchivePret implements Serializable{
 	
 	
 	public ArchivePret() {
-		
+		compteurIdPret = 1;
 	}	
 	
 	public static ArchivePret getArchivePret() {
@@ -74,5 +75,13 @@ public class ArchivePret implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int getCompteurIdPret() {
+		return compteurIdPret;
+	}
+
+	public static void addCompteurIdPret() {
+		compteurIdPret++;
 	}
 }

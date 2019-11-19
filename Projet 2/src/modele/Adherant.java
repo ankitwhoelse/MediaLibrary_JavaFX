@@ -46,6 +46,27 @@ public class Adherant extends Adherants implements Serializable{
 //		return lstPrets;
 //	}
 	
+	public void setStrId(String strId) {
+		this.strId = strId;
+	}
+	public void setNumTelephone(String numTelephone) {
+		this.numTelephone = numTelephone;
+	}
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+	public void setPrets(ObservableList<Pret> prets) {
+		Prets = prets;
+	}
+	public void setLstPrets(ArrayList<Pret> lstPrets) {
+		this.lstPrets = lstPrets;
+	}
 	public ArrayList<Pret> getLstPrets() {
 		return lstPrets;
 	}

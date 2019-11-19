@@ -9,7 +9,7 @@ public class Document implements Serializable{
 	private String  noDoc;
 	private String  titre;
 	private LocalDate  dateParution;
-	private boolean  disponible;
+	private boolean disponible;
 	
 	public Document(String noDoc, String titre, LocalDate dateParution, boolean disponible) {
 		super();

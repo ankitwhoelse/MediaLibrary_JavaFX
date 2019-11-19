@@ -9,7 +9,7 @@ public class DVD extends Document{
 	private static final long serialVersionUID = 1L;
 	private int  nbDisques;
 	private String strRealisateur;
-	public DVD(String noDoc, String titre, LocalDate dateParution, String disponible, 
+	public DVD(String noDoc, String titre, LocalDate dateParution, boolean disponible, 
 			   int nbDisques, String strRealisateur) {
 		
 		super(noDoc, titre, dateParution, disponible);
