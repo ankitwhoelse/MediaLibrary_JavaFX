@@ -404,7 +404,8 @@ public class Interface extends Application{
 					gpAddUser.setVgap(5);
 					Text txtId = new Text("ID");
 					tbID = new TextField();
-					tbID.setDisable(true);
+					tbID.setText("adher" + Adherants.getInstance().getCompteurID());
+//					tbID.setDisable(true);
 					txtP = new Text("Prénom");
 					tbP = new TextField();
 					txtN = new Text("Nom");
@@ -439,7 +440,6 @@ public class Interface extends Application{
 							
 							Adherants.getInstance().addLstAdherant(adher);
 							System.out.println(Adherants.getInstance().getLstAdherants());
-							System.out.println("allo");
 							donneesAdh.add(adher);
 							
 							Optional<ButtonType> retour = afficherBoiteInfo(13);
