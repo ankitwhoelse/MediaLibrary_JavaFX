@@ -1,6 +1,7 @@
 package vue;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
@@ -58,7 +59,7 @@ import modele.SerialisationCatalogue;
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnModifConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer, btnSupprPrep, btnSupprUtil;
+	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnModifConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer, btnSupprPrep, btnSupprUtil, btnCataConfir, btnSupprCata;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID, tbModifPrep, tbIDPrep, tbMDP;
 	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT, tbEmprID, tbEmprDocID;
@@ -83,6 +84,7 @@ public class Interface extends Application{
 	ObservableList<Periodique> donneesPerio;
 	final TableView<Livre> tableLivre = new TableView<Livre>();
 	ObservableList<Livre> donneesLivres;
+	final TableView<Document> tableCatalogue = new TableView<Document>();
 	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
@@ -592,7 +594,6 @@ public class Interface extends Application{
 				hBoxCatal.setSpacing(20);
 				hBoxCatal.setPadding(new Insets(10));
 				
-				final TableView<Document> tableCatalogue = new TableView<Document>();
 				TableColumn<Document, String> colonneNo = new TableColumn<Document, String> ("No Doc");
 				TableColumn<Document, String> colonneTi = new TableColumn<Document, String>("Titre");
 				TableColumn<Document, LocalDate> colonneDP = new TableColumn<Document, LocalDate>("Date parution");
@@ -613,7 +614,8 @@ public class Interface extends Application{
 				Text txtModif2 = new Text("Actions sur le catalogue");
 				btnAjoutCata = new Button("Ajouter");
 				btnAjoutCata.setOnAction(gc);
-				Button btnSupprCata = new Button("Supprimer");
+				btnSupprCata = new Button("Supprimer");
+				btnSupprCata.setOnAction(gc);
 				
 				gbModifC.add(txtModif2, 0, 0, 2, 1);
 				gbModifC.add(btnAjoutCata, 0, 1, 1, 1);				gbModifC.add(btnSupprCata, 1, 1, 1, 1);
@@ -652,7 +654,8 @@ public class Interface extends Application{
 					tbAj3 = new TextField();
 					tbAj3.setVisible(false);
 					
-					Button btnCataConfir = new Button("Confirmer");
+					btnCataConfir = new Button("Confirmer");
+					btnCataConfir.setOnAction(gc);
 					Button btnCataQuit = new Button("Annuler");
 					btnCataQuit.setOnAction(e -> stage3.close());
 					
@@ -1179,13 +1182,117 @@ public class Interface extends Application{
 					Optional<ButtonType> retour = afficherBoiteInfo(11);
 				}
 			}
+			
+//			AJOUT DOCUMENT DANS CATALOGUE
+			if(e.getSource() == btnCataConfir) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+				if(rbAjoutL.isSelected()) {
+					if(tbAjTitr.getText().trim().length() == 0 || tbAjDate.getText().trim().length() == 0 || tbAjMC.getText().trim().length() == 0 ||
+							tbAj2.getText().trim().length() == 0) {
+						Optional<ButtonType> retour = afficherBoiteInfo(8);
+					}
+					else {
+						String titre = tbAjTitr.getText().trim();
+						LocalDate date = LocalDate.parse(tbAjDate.getText().trim(), formatter);
+						String motsCles = tbAjMC.getText().trim();
+						String Auteur = tbAj2.getText().trim();
+						Livre livre = new Livre("Livre" + Catalogue.getInstance().getCompteurIdLivre(),titre, date, true, motsCles, Auteur);
+						Catalogue.getInstance().addLstDocuments(livre);
+						Catalogue.getInstance().addLstLivres(livre);
+						donneesDoc.add(livre);
+						donneesLivres.add(livre);
+						tbAjTitr.clear();
+						tbAjDate.clear();
+						tbAj2.clear();
+						stage3.close();
+						Optional<ButtonType> retour = afficherBoiteInfo(29);
+					}
+				}
+				else if(rbAjoutD.isSelected()) {
+					if(tbAjTitr.getText().trim().length() == 0 || tbAjDate.getText().trim().length() == 0 || tbAjMC.getText().trim().length() == 0 ||
+							tbAj2.getText().trim().length() == 0 || tbAj3.getText().trim().length() == 0) {
+						Optional<ButtonType> retour = afficherBoiteInfo(8);
+					}
+					else {
+						String titre = tbAjTitr.getText().trim();
+						LocalDate date = LocalDate.parse(tbAjDate.getText().trim(), formatter);
+						String motsCles = tbAjMC.getText().trim();
+						String realisateur = tbAj2.getText().trim();
+						int nbDisques = Integer.parseInt(tbAj3.getText().trim());
+						
+						DVD dvd = new DVD("DVD" + Catalogue.getInstance().getCompteurIdDVD(),titre, date, true, nbDisques, realisateur, motsCles);
+						Catalogue.getInstance().addLstDocuments(dvd);
+						Catalogue.getInstance().addLstDvd(dvd);
+						donneesDoc.add(dvd);
+						donneesDvd.add(dvd);
+						tbAjTitr.clear();
+						tbAjDate.clear();
+						tbAj2.clear();
+						tbAj3.clear();
+						stage3.close();
+						Optional<ButtonType> retour = afficherBoiteInfo(29);
+					}
+				}
+				else {
+					if(tbAjTitr.getText().trim().length() == 0 || tbAjDate.getText().trim().length() == 0 || tbAjMC.getText().trim().length() == 0 ||
+							tbAj2.getText().trim().length() == 0 || tbAj3.getText().trim().length() == 0) {
+						Optional<ButtonType> retour = afficherBoiteInfo(8);
+					}
+					else {
+						String titre = tbAjTitr.getText().trim();
+						LocalDate date = LocalDate.parse(tbAjDate.getText().trim(), formatter);
+						String motsCles = tbAjMC.getText().trim();
+						int noVolume = Integer.parseInt(tbAj2.getText().trim());
+						int noPeriodique = Integer.parseInt(tbAj3.getText().trim());
+						
+						Periodique per = new Periodique("DVD" + Catalogue.getInstance().getCompteurIdPer(),titre, date, true, noVolume, noPeriodique, motsCles);
+						Catalogue.getInstance().addLstDocuments(per);
+						Catalogue.getInstance().addLstPeriodiques(per);
+						donneesDoc.add(per);
+						donneesPerio.add(per);
+						tbAjTitr.clear();
+						tbAjDate.clear();
+						tbAj2.clear();
+						tbAj3.clear();
+						stage3.close();
+						Optional<ButtonType> retour = afficherBoiteInfo(29);
+					}
+				}
+			}
+			
+//			SUPPRIMER DOCUMENT CATALOGUE
+			if(e.getSource() == btnSupprCata) {
+				Document doc = tableCatalogue.getSelectionModel().getSelectedItem();
+				if(doc != null) {
+					donneesDoc.remove(doc);
+					Catalogue.getInstance().getLstDoc().remove(doc);
+					String type = TypeDocument(doc.getNoDoc());
+					switch(type) {
+					case "lvr":
+						donneesLivres.remove(doc);
+						Catalogue.getInstance().getLstLvr().remove(doc);
+						break;
+					case "dvd":
+						donneesDvd.remove(doc);
+						Catalogue.getInstance().getLstDvd().remove(doc);
+						break;
+					default:
+						donneesPerio.remove(doc);
+						Catalogue.getInstance().getLstPer().remove(doc);
+					}
+					Optional<ButtonType> retour = afficherBoiteInfo(30);
+				}
+				else {
+					Optional<ButtonType> retour = afficherBoiteInfo(23);
+				}
+			}
+			
 //			ENABLE/DISABLE RADIO BUTTON DE MOTS CLÉS
 			if (tabPane.getSelectionModel().getSelectedItem() == tabLivre) {
 				rbAuteur.setSelected(true);
 				rbMotsCles.setDisable(false);
 			} else
 				rbMotsCles.setDisable(true);
-			
 		}
 	}
 	
@@ -1204,7 +1311,7 @@ public class Interface extends Application{
 			alert=new Alert(AlertType.ERROR);
 			alert.setTitle("Format invalide");
 			alert.setHeaderText("");
-			alert.setContentText("Veuillez assurer que le numéro de téléphone soit composé de 10 caractères.");
+			alert.setContentText("Veuillez assurer que le numéro de téléphone soit composé de 14 caractères.");
 			break;
 		case 8:
 			alert=new Alert(AlertType.ERROR);
@@ -1331,6 +1438,18 @@ public class Interface extends Application{
 			alert.setTitle("Adherant");
 			alert.setHeaderText("");
 			alert.setContentText("La modification sur l'adhérant s'est bien exécutée");
+			break;
+		case 29:
+			alert=new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Document");
+			alert.setHeaderText("");
+			alert.setContentText("Le document a bien été ajouté au catalogue");
+			break;
+		case 30:
+			alert=new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Document");
+			alert.setHeaderText("");
+			alert.setContentText("Le document a bien été supprimé");
 			break;
 		
 		default:
