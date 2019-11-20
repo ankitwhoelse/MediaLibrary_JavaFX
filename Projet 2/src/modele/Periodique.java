@@ -13,11 +13,13 @@ public class Periodique extends Document {
 	private static final long serialVersionUID = 1L;
 	private int noVolume;
 	private  int noPeriodique;
+	private String motsCles;
 
-	public Periodique(String noDoc, String titre, LocalDate dateParution, boolean disponible, int noVolume, int noPeriodique) {
+	public Periodique(String noDoc, String titre, LocalDate dateParution, boolean disponible, int noVolume, int noPeriodique, String motsCles) {
 		super(noDoc, titre, dateParution, disponible);
 	this.noVolume= noVolume;
 	this.noPeriodique= noPeriodique;
+	this.motsCles = motsCles;
 	}
 
 	@Override
@@ -39,6 +41,14 @@ public class Periodique extends Document {
 
 	public void setNoPeriodique(int noPeriodique) {
 		this.noPeriodique = noPeriodique;
+	}
+
+	public String getMotsCles() {
+		return motsCles;
+	}
+
+	public void setMotsCles(String motsCles) {
+		this.motsCles = motsCles;
 	}
 
 	

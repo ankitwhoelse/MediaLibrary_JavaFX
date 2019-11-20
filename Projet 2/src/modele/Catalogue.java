@@ -23,12 +23,67 @@ public final class Catalogue implements Serializable {
 	private ArrayList<Livre> lstLivres;
 	private ArrayList<Periodique> lstPeriodiques;
 	private ArrayList<DVD> lstDvd;
+	private int compteurIdLivre;
+	private int compteurIdDVD;
+	private int compteurIdPer;
+	
+	
+	public int getCompteurIdLivre() {
+		return compteurIdLivre;
+	}
+
+	public void setCompteurIdLivre(int compteurIdLivre) {
+		this.compteurIdLivre = compteurIdLivre;
+	}
+
+	public int getCompteurIdDVD() {
+		return compteurIdDVD;
+	}
+
+	public void setCompteurIdDVD(int compteurIdDVD) {
+		this.compteurIdDVD = compteurIdDVD;
+	}
+
+	public int getCompteurIdPer() {
+		return compteurIdPer;
+	}
+
+	public void setCompteurIdPer(int compteurIdPer) {
+		this.compteurIdPer = compteurIdPer;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void addLstDocuments(Document doc) {
+		lstDocuments.add(doc);
+		
+	}
+
+	public void addLstLivres(Livre livre) {
+		lstLivres.add(livre);
+		compteurIdLivre++;
+	}
+
+	public void addLstPeriodiques(Periodique per) {
+		lstPeriodiques.add(per);
+		compteurIdPer++;
+	}
+	
+	public void addLstDvd(DVD dvd) {
+		lstDvd.add(dvd);
+		compteurIdDVD++;
+	}
 
 	public Catalogue() {
 		lstDocuments = new ArrayList<>();
 		lstLivres = new ArrayList<>();
 		lstPeriodiques = new ArrayList<>();
 		lstDvd = new ArrayList<>();
+		compteurIdLivre = lstLivres.size() + 1;
+		compteurIdDVD = lstDvd.size() + 1;
+		compteurIdPer = lstPeriodiques.size() + 1;
 		
 		BufferedReader br = null;
 		StringTokenizer st;
@@ -71,8 +126,9 @@ public final class Catalogue implements Serializable {
 					boolean disponible = true;
 					int nbDisques = Integer.parseInt(st.nextToken().trim()); 
 					String strRealisateur = st.nextToken().trim();
+					String motsCles = null;
 					
-					disk = new DVD(noDoc, titre, dateParution, disponible, nbDisques, strRealisateur);
+					disk = new DVD(noDoc, titre, dateParution, disponible, nbDisques, strRealisateur, motsCles);
 					lstDvd.add(disk);
 				} 
 				br.close();
@@ -86,8 +142,9 @@ public final class Catalogue implements Serializable {
 					boolean disponible = true;
 					int noVolume = Integer.parseInt(st.nextToken().trim());
 					int noPeriodique = Integer.parseInt(st.nextToken().trim());
+					String motsCles = null;
 					
-					weekly = new Periodique(noDoc, titre, dateParution, disponible, noVolume, noPeriodique);
+					weekly = new Periodique(noDoc, titre, dateParution, disponible, noVolume, noPeriodique, motsCles);
 					lstPeriodiques.add(weekly);
 				} 
 				br.close();
