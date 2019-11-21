@@ -1,6 +1,6 @@
 package vue;
 
-import java.security.Key;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -208,27 +208,6 @@ public class Interface extends Application{
 			txtRecherche = new TextField("");
 			txtRecherche.setPrefWidth(100);
 			txtRecherche.setMinWidth(100);
-				
-//			RECHERCHE AUTEUR & MOTS CLES
-			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
-			FilteredList<Livre> filteredLiv = new FilteredList<Livre>(donneesLivres, book -> true);
-			txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
-				filteredLiv.setPredicate(book -> {
-					System.out.println("listening" + newValue.toString() + newValue);
-						//si rien est taper dans le textfield
-					if (newValue==null || newValue.isEmpty())
-						return true;
-					
-					String lowCaseFilter = newValue.toLowerCase();
-						//quand il y a du text dans le textfield
-					if (book.getAuteur().toLowerCase().indexOf(lowCaseFilter) != -1) 
-						return true;
-					else if (book.getMotsCles().toLowerCase().indexOf(lowCaseFilter) != -1)
-						return true;
-					else
-						return false;
-				});
-			});
 			
 			btnSearch = new Button();
 			btnSearch.setText("Rechercher");
@@ -311,17 +290,36 @@ public class Interface extends Application{
 			tabLivre.setText("Livre");
 //			tabLivre.setGraphic(new ImageView(new Image("images/icon-livre.png")));
 			
-
+			
+//					RECHERCHE AUTEUR & MOTS CLES
+				donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
+				FilteredList<Livre> filteredLiv = new FilteredList<Livre>(donneesLivres, book -> true);
+				txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+					System.out.println("listening: " + newValue.toString() + newValue);
+					filteredLiv.setPredicate(book -> {
+							//si rien est taper dans le textfield
+						if (newValue==null || newValue.isEmpty())
+							return true;
+						
+							//quand il y a du text dans le textfield
+						if (book.getAuteur().toLowerCase().indexOf(newValue.toLowerCase()) != -1) 
+							return true;
+						else if (book.getMotsCles().toLowerCase().indexOf(newValue.toLowerCase()) != -1)
+							return true;
+						else
+							return false;
+					});
+				});
+				
 				
 				SortedList<Livre> sortedLivre = new SortedList<Livre>(filteredLiv);
 				sortedLivre.comparatorProperty().bind(tableLivre.comparatorProperty());
 				
-			
+				
 			TableColumn<Livre, String> colonneNum3 = new TableColumn<Livre, String> ("Numéro");
 			TableColumn<Livre, String> colonneTitre3 = new TableColumn<Livre, String> ("Titre");
 			TableColumn<Livre, LocalDate> colonneParution3 = new TableColumn<Livre, LocalDate> ("Date de parution");
 			TableColumn<Livre, String> colonneDispo3 = new TableColumn<Livre, String> ("Disponible");
-//			TableColumn<Livre, Integer> colonneMCle = new TableColumn<Livre, Integer> ("Mots clés");
 			TableColumn<Livre, String> colonneAuteur = new TableColumn<Livre, String> ("Auteur");
 			tableLivre.getColumns().addAll(colonneNum3, colonneTitre3, colonneParution3, colonneDispo3,/* colonneMCle, */colonneAuteur);
 			
@@ -329,17 +327,13 @@ public class Interface extends Application{
 			colonneTitre3.setPrefWidth(410);			colonneTitre3.setMaxWidth(410);
 			colonneParution3.setPrefWidth(120);			colonneParution3.setMaxWidth(120);
 			colonneDispo3.setPrefWidth(80);				colonneDispo3.setMaxWidth(80);
-//			colonneMCle.setPrefWidth(120);				colonneMCle.setMaxWidth(120);
 			colonneAuteur.setPrefWidth(150);			colonneAuteur.setMaxWidth(150);
 			
-//			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
 			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
 			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
 			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
 			colonneDispo3.setCellValueFactory(new PropertyValueFactory<Livre, String>("disponible"));
-//			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
 			colonneAuteur.setCellValueFactory(new PropertyValueFactory<Livre, String>("auteur"));
-//			tableLivre.setItems(donneesLivres);
 			tableLivre.setItems(sortedLivre);
 			tabLivre.setContent(tableLivre);
 			
