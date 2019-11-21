@@ -1,5 +1,6 @@
 package vue;
 
+import java.security.Key;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -35,6 +37,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -202,6 +205,27 @@ public class Interface extends Application{
 			txtRecherche = new TextField("");
 			txtRecherche.setPrefWidth(100);
 			txtRecherche.setMinWidth(100);
+				
+//			RECHERCHE AUTEUR & MOTS CLES
+			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
+			FilteredList<Livre> filteredLiv = new FilteredList<Livre>(donneesLivres, book -> true);
+			txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+				filteredLiv.setPredicate(book -> {
+					System.out.println("listening" + newValue.toString() + newValue);
+						//si rien est taper dans le textfield
+					if (newValue==null || newValue.isEmpty())
+						return true;
+					
+					String lowCaseFilter = newValue.toLowerCase();
+						//quand il y a du text dans le textfield
+					if (book.getAuteur().toLowerCase().indexOf(lowCaseFilter) != -1) 
+						return true;
+					else if (book.getMotsCles().toLowerCase().indexOf(lowCaseFilter) != -1)
+						return true;
+					else
+						return false;
+				});
+			});
 			
 			btnSearch = new Button();
 			btnSearch.setText("Rechercher");
@@ -278,12 +302,17 @@ public class Interface extends Application{
 			tabDvd.setContent(tableDvd);
 			
 						
-	//			onglet livre
+//										ONGLET LIVRE
 			tabLivre = new Tab();
 			tabLivre.setClosable(false);
 			tabLivre.setText("Livre");
 //			tabLivre.setGraphic(new ImageView(new Image("images/icon-livre.png")));
 			
+
+				
+				SortedList<Livre> sortedLivre = new SortedList<Livre>(filteredLiv);
+				sortedLivre.comparatorProperty().bind(tableLivre.comparatorProperty());
+				
 			
 			TableColumn<Livre, String> colonneNum3 = new TableColumn<Livre, String> ("Numéro");
 			TableColumn<Livre, String> colonneTitre3 = new TableColumn<Livre, String> ("Titre");
@@ -300,15 +329,15 @@ public class Interface extends Application{
 //			colonneMCle.setPrefWidth(120);				colonneMCle.setMaxWidth(120);
 			colonneAuteur.setPrefWidth(150);			colonneAuteur.setMaxWidth(150);
 			
-			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
+//			donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
 			colonneNum3.setCellValueFactory(new PropertyValueFactory<Livre, String>("noDoc"));
 			colonneTitre3.setCellValueFactory(new PropertyValueFactory<Livre, String>("titre"));
 			colonneParution3.setCellValueFactory(new PropertyValueFactory<Livre, LocalDate>("dateParution"));
 			colonneDispo3.setCellValueFactory(new PropertyValueFactory<Livre, String>("disponible"));
 //			colonneMCle.setCellValueFactory(new PropertyValueFactory<Livre, Integer>("motsCles"));
 			colonneAuteur.setCellValueFactory(new PropertyValueFactory<Livre, String>("auteur"));
-			tableLivre.setItems(donneesLivres);
-			
+//			tableLivre.setItems(donneesLivres);
+			tableLivre.setItems(sortedLivre);
 			tabLivre.setContent(tableLivre);
 			
 			
@@ -600,13 +629,12 @@ public class Interface extends Application{
 				TableColumn<Document, String> colonneNumDi = new TableColumn<Document, String>("Disponibilite");
 				tableCatalogue.getColumns().addAll(colonneNo, colonneTi, colonneDP, colonneNumDi);
 				
-
 				colonneNo.setCellValueFactory(new PropertyValueFactory<Document, String> ("noDoc"));
 				colonneTi.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
 				colonneDP.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
 				colonneNumDi.setCellValueFactory(new PropertyValueFactory<Document, String>("disponible"));
 				tableCatalogue.setItems(donneesDoc);
-				
+		
 				
 				GridPane gbModifC = new GridPane();
 				gbModifC.setHgap(5);
@@ -616,7 +644,7 @@ public class Interface extends Application{
 				btnAjoutCata.setOnAction(gc);
 				btnSupprCata = new Button("Supprimer");
 				btnSupprCata.setOnAction(gc);
-				
+							
 				gbModifC.add(txtModif2, 0, 0, 2, 1);
 				gbModifC.add(btnAjoutCata, 0, 1, 1, 1);				gbModifC.add(btnSupprCata, 1, 1, 1, 1);
 				
@@ -1286,13 +1314,7 @@ public class Interface extends Application{
 					Optional<ButtonType> retour = afficherBoiteInfo(23);
 				}
 			}
-			
-//			ENABLE/DISABLE RADIO BUTTON DE MOTS CLÉS
-			if (tabPane.getSelectionModel().getSelectedItem() == tabLivre) {
-				rbAuteur.setSelected(true);
-				rbMotsCles.setDisable(false);
-			} else
-				rbMotsCles.setDisable(true);
+
 		}
 	}
 	

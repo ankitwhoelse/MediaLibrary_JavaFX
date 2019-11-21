@@ -9,13 +9,23 @@ import java.time.LocalDate;
 public class Livre  extends Document {
 	
 	private static final long serialVersionUID = 1L;
-private String auteur;
+	private String auteur;
+	private String motsCles;
 	
 	public Livre(String noDoc, String titre, LocalDate dateParution, boolean disponible, String motsCles, 
 				 String auteur) {
 		
 		super(noDoc, titre, dateParution, disponible);
+		this.motsCles = motsCles;
 		this.auteur =auteur;
+	}
+
+	public String getMotsCles() {
+		return motsCles;
+	}
+
+	public void setMotsCles(String motsCles) {
+		this.motsCles = motsCles;
 	}
 
 	@Override
