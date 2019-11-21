@@ -1,34 +1,35 @@
 package modele;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Pret {
 
 	private String idPret;
-	private Date dateEmprunt; 
+	private LocalDate dateEmprunt; 
 	private String idAdherant;
 	private String noDoc;
-	private Date dateRetour; // même format que dateEmprunt
+	private LocalDate dateRetour; // même format que dateEmprunt
 	private double amende = 0;
 	
 	private ArrayList<Pret> lstPrets = new ArrayList<Pret>();
 	
-	public Pret(Date dateEmprunt, String idAdherant, String noDoc, String idPret) {
+	public Pret(LocalDate date, String idAdherant, String noDoc, String idPret) {
 		// TODO Auto-generated constructor stub
-		this.dateEmprunt = dateEmprunt;
+		this.dateEmprunt = date;
 		this.idAdherant = idAdherant;
 		this.noDoc = noDoc;
 		this.idPret = idPret;
 		
 	}
 
-	public Date getDateRetour() {
+	public LocalDate getDateRetour() {
 		return dateRetour;
 	}
 
-	public void setDateRetour(Date dateRetour) {
-		this.dateRetour = dateRetour;
+	public void setDateRetour(LocalDate localDate) {
+		this.dateRetour = localDate;
 	}
 
 	public double getAmende() {
@@ -39,7 +40,7 @@ public class Pret {
 		this.amende = amende;
 	}
 
-	public Date getDateEmprunt() {
+	public LocalDate getDateEmprunt() {
 		return dateEmprunt;
 	}
 

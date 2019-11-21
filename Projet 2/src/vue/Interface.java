@@ -61,7 +61,7 @@ public class Interface extends Application{
 	BorderPane root, root2;
 	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnModifConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer, btnSupprPrep, btnSupprUtil, btnCataConfir, btnSupprCata;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID, tbModifPrep, tbIDPrep, tbMDP;
-	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP;
+	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP, txtUtil, txtIdAdher, txtAdresseAdher, txtNumAdher;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT, tbEmprID, tbEmprDocID;
 	Text txtAjTitr, txtAjDate, txtAjMC, txtAj2, txtAj3, txtAj4;
 	CheckBox cbConn;
@@ -70,6 +70,7 @@ public class Interface extends Application{
 	Stage stage2, stage3, stage4, stage5;
 	TabPane tabPane;
 	Tab tabDoc, tabLivre, tabDvd, tabPerio, tabUtil, tabPrepo, tabAdher, tabPrets, tabPrep;
+	Adherant connectedAdher;
 	ObservableList<Pret> donneesPrets;
 	final TableView<Pret> tablePrets = new TableView<Pret>();
 	final TableView<Prepose> tabPrepose = new TableView<Prepose>();
@@ -85,6 +86,8 @@ public class Interface extends Application{
 	final TableView<Livre> tableLivre = new TableView<Livre>();
 	ObservableList<Livre> donneesLivres;
 	final TableView<Document> tableCatalogue = new TableView<Document>();
+	TableView<Pret> tablePretAdher = new TableView<Pret>();
+	ObservableList<Pret> donneesPretAdher;
 	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage) {
@@ -690,20 +693,51 @@ public class Interface extends Application{
 				tabAdher.setText("Compte");
 				
 				VBox vBoxUtil = new VBox();
+				HBox hBoxPretAdher = new HBox();
 			
-				Text txtUtil = new Text();
-				txtUtil.setText("Utilisateur: " + txtPrenom.getText() + txtNom.getText());
-				Adherant adhLogin = null;
-				for (Adherant adher : Adherants.getInstance().getLstAdherants()) {
-					if (adher.getNom().compareToIgnoreCase(txtPrenom.getText())==0)
-						adhLogin = adher;
-				}
-//				Text txtAdhAdr = new Text(adhLogin.getAdresse());
-//				Text txtAdhTel = new Text(adhLogin.getNumTelephone());
+				txtUtil = new Text();
+				txtIdAdher = new Text();
+				txtAdresseAdher = new Text();
+				txtNumAdher = new Text();
+			
+				txtUtil.setText("Adhérant: ");
+				txtIdAdher.setText("ID: ");
+				txtAdresseAdher.setText("Adresse: ");
+				txtNumAdher.setText("Numéro de téléphone: ");
+				
+				hBoxPretAdher.getChildren().addAll(txtIdAdher, txtAdresseAdher, txtNumAdher);
+				
+				TableColumn<Pret, String> colonneIdPretAdher = new TableColumn<Pret, String>();
+				TableColumn<Pret, String> colonneIdAdherPretAdher = new TableColumn<Pret, String>();
+				TableColumn<Pret, String> colonneIdDocPretAdher = new TableColumn<Pret, String>();
+				TableColumn<Pret, LocalDate> colonneDateEmpruntPretAdher = new TableColumn<Pret, LocalDate>();
+				TableColumn<Pret, LocalDate> colonneDateRetourPretAdher = new TableColumn<Pret, LocalDate>();
+				TableColumn<Pret, Double> colonneAmendePretAdher = new TableColumn<Pret, Double>();
+				tablePretAdher.getColumns().addAll(colonneIdPretAdher, colonneIdAdherPretAdher, colonneIdDocPretAdher, colonneDateEmpruntPretAdher, colonneDateRetourPretAdher, colonneAmendePretAdher);
+				
+				colonneIdPretAdher.setPrefWidth(100);			colonneIdPretAdher.setMaxWidth(100);
+				colonneDateEmpruntPretAdher.setPrefWidth(100);				colonneDateEmpruntPretAdher.setMaxWidth(100);
+				colonneDateRetourPretAdher.setPrefWidth(100);			colonneDateRetourPretAdher.setMaxWidth(100);
+				colonneIdAdherPretAdher.setPrefWidth(100);				colonneIdAdherPretAdher.setMaxWidth(100);
+				colonneIdDocPretAdher.setPrefWidth(100);			colonneIdDocPretAdher.setMaxWidth(100);
+				colonneAmendePretAdher.setPrefWidth(100);			colonneAmendePretAdher.setMaxWidth(100);
+				
+				colonneIdPretAdher.setCellValueFactory(new PropertyValueFactory<Pret, String>("idPret"));
+				colonneIdAdherPretAdher.setCellValueFactory(new PropertyValueFactory<Pret, String>("idAdherant"));
+				colonneIdDocPretAdher.setCellValueFactory(new PropertyValueFactory<Pret, String>("noDoc"));
+				colonneDateEmpruntPretAdher.setCellValueFactory(new PropertyValueFactory<Pret, LocalDate>("dateEmprunt"));
+				colonneDateRetourPretAdher.setCellValueFactory(new PropertyValueFactory<Pret, LocalDate>("dateRetour"));
+				colonneAmendePretAdher.setCellValueFactory(new PropertyValueFactory<Pret, Double>("amende"));
+				tablePretAdher.setItems(donneesPretAdher);
 				
 				VBox.setMargin(txtUtil, new Insets(10));
+				VBox.setMargin(tablePretAdher, new Insets(10));
+				HBox.setMargin(txtIdAdher, new Insets(10));
+				HBox.setMargin(txtNumAdher, new Insets(10));
+				HBox.setMargin(txtAdresseAdher, new Insets(10));
 				
-				vBoxUtil.getChildren().addAll(txtUtil/*, txtAdhAdr, txtAdhTel*/);
+				
+				vBoxUtil.getChildren().addAll(txtUtil, hBoxPretAdher, tablePretAdher);
 				tabAdher.setContent(vBoxUtil);
 			}
 			
@@ -778,13 +812,21 @@ public class Interface extends Application{
 			Button btnQuit = new Button();
 			btnQuit.setText("Quitter");
 			btnQuit.setOnAction(e -> {stage2.close(); primaryStage.close(); 
-				SerialisationCatalogue.serialiseCata(); Adherants.getInstance().serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
+				SerialisationCatalogue.serialiseCata();
+				Adherants.getInstance().serialiseAdherants();
+				Preposes.getInstance().serialisePreposes();
+				ArchivePret.getInstance().serialiseArchivePret();
+			});
 			HBox.setMargin(btnQuit, new Insets(10));
 			
 			Button btnFermer = new Button();
 			btnFermer.setText("Fermer le catalogue");
 			btnFermer.setOnAction(e -> {stage2.close();
-			SerialisationCatalogue.serialiseCata(); Adherants.getInstance().serialiseAdherants(); Preposes.serialisePreposes(); ArchivePret.serialiseArchivePret();});
+				SerialisationCatalogue.serialiseCata();
+				Adherants.getInstance().serialiseAdherants();
+				Preposes.getInstance().serialisePreposes();
+				ArchivePret.getInstance().serialiseArchivePret();
+			});
 			HBox.setMargin(btnFermer, new Insets(10));
 					
 			hBoxBtn.getChildren().addAll(btnQuit, btnFermer);
@@ -841,6 +883,14 @@ public class Interface extends Application{
 					} else if ((txtNom.getLength()!=0 && txtPrenom.getLength()!=0) && txtTel.getLength()==14 && !cbConn.isSelected()) {
 						if(connectedAdherant(txtNom.getText().trim(), txtPrenom.getText().trim(), txtTel.getText().trim())) {
 							Optional<ButtonType> retour = afficherBoiteInfo(9);
+							connectedAdher = getAdherant(txtNom.getText().trim(), txtPrenom.getText().trim(), txtTel.getText().trim());
+							
+							txtUtil.setText("Adhérant: " + connectedAdher.getNom() + " " +  connectedAdher.getPrenom());
+							txtIdAdher.setText("ID: " + connectedAdher.getStrId());
+							txtAdresseAdher.setText("Adresse: " + connectedAdher.getAdresse());
+							txtNumAdher.setText("Numéro de téléphone: " + connectedAdher.getNumTelephone());
+							donneesPretAdher = FXCollections.observableArrayList(connectedAdher.getLstPrets());
+							tablePretAdher.setItems(donneesPretAdher);
 							tabAdher.setDisable(false);			// Lorsqu'il est connecté l'adhérant
 							tabPrepo.setDisable(true);			// ne peut accèder qu'aux informations
 							tabPrets.setDisable(true);			// de son compte et au catalogue
@@ -969,7 +1019,7 @@ public class Interface extends Application{
 									Optional<ButtonType> retour = afficherBoiteInfo(16);
 								}
 								else {
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									pret = new Pret(LocalDate.now(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
 									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
 									
@@ -985,7 +1035,7 @@ public class Interface extends Application{
 								}
 								else {
 
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									pret = new Pret(LocalDate.now(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
 									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
 
@@ -1001,7 +1051,7 @@ public class Interface extends Application{
 								}
 								else {
 
-									pret = new Pret(Calendar.getInstance().getTime(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
+									pret = new Pret(LocalDate.now(), IDAdher, IDdoc, "pret" + ArchivePret.getInstance().getCompteurIdPret());
 									ArchivePret.getInstance().addCompteurIdPret();
 									ArchivePret.getInstance().addLstPrets(pret);
 
@@ -1038,7 +1088,7 @@ public class Interface extends Application{
 						donneesPrets.remove(pret);
 						adher.getLstPrets().remove(pret);
 						getDoc(pret.getNoDoc()).setDisponible(true);
-						pret.setDateRetour(Calendar.getInstance().getTime());
+						pret.setDateRetour(LocalDate.now());
 						Optional<ButtonType> retour = afficherBoiteInfo(20);
 					}
 				}
@@ -1056,7 +1106,7 @@ public class Interface extends Application{
 						donneesPrets.remove(pret);
 						adher.getLstPrets().remove(pret);
 						getDoc(pret.getNoDoc()).setDisponible(true);
-						pret.setDateRetour(Calendar.getInstance().getTime());
+						pret.setDateRetour(LocalDate.now());
 						pret.setAmende(0);
 						Optional<ButtonType> retour = afficherBoiteInfo(21);
 					}
@@ -1167,7 +1217,7 @@ public class Interface extends Application{
 			if(e.getSource() == btnSupprUtil) {
 				Adherant adher = tableUtilisateurs.getSelectionModel().getSelectedItem();
 				if(adher != null) {
-					donneesPrep.remove(adher);
+					donneesAdh.remove(adher);
 					Adherants.getInstance().getLstAdherants().remove(adher);
 					Optional<ButtonType> retour = afficherBoiteInfo(27);
 				}
@@ -1587,6 +1637,19 @@ public class Interface extends Application{
 			}
 		}
 		return prep;
+	}
+	
+//	TROUVER ADHERANT A PARTIR DE SON NOM, SON PRENOM ET SON TELEPHONE
+	public Adherant getAdherant(String nom, String prenom, String tel) {
+		Adherant adher = null;
+		
+		for(Adherant adherant: Adherants.getInstance().getLstAdherants()) {
+			if((nom.compareTo(adherant.getNom()) == 0)&&(prenom.compareTo(adherant.getPrenom()) == 0)&&(tel.compareTo(adherant.getNumTelephone()) == 0)) {
+				adher = adherant;
+			}
+		}
+		System.out.println(adher);
+		return adher;
 	}
 
 }	// FIN DE LA CLASSE
