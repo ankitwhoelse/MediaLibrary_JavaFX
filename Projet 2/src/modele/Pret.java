@@ -1,11 +1,14 @@
 package modele;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Pret {
+public class Pret implements Serializable{
 
+
+	private static final long serialVersionUID = 1L;
 	private String idPret;
 	private LocalDate dateEmprunt; 
 	private String idAdherant;

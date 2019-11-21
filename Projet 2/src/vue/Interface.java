@@ -62,13 +62,13 @@ import modele.SerialisationCatalogue;
 public class Interface extends Application{
 
 	BorderPane root, root2;
-	Button btnConn, btnBiblio, btnCons, btnSearch, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnModifConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer, btnSupprPrep, btnSupprUtil, btnCataConfir, btnSupprCata;
+	Button btnConn, btnBiblio, btnCons, btnAjoutUtil, btnAjoutCata, btnConfirmU, btnModifConfirmPrep, btnAjoutPrep, btnEmprunter, btnRetourner, btnPayer, btnSupprPrep, btnSupprUtil, btnCataConfir, btnSupprCata;
 	TextField txtPrenom, txtNom, txtTel, txtRecherche, tbModifU, tbID, tbModifPrep, tbIDPrep, tbMDP;
 	Text txt1, txt2, txt3, txt4, txtA, txtT, txtN, txtP, txtMDP, txtUtil, txtIdAdher, txtAdresseAdher, txtNumAdher;
 	TextField tbAjTitr, tbAjDate, tbAjMC, tbAj2, tbAj3, tbAj4, tbN, tbP, tbA, tbT, tbEmprID, tbEmprDocID;
 	Text txtAjTitr, txtAjDate, txtAjMC, txtAj2, txtAj3, txtAj4;
 	CheckBox cbConn;
-	RadioButton rbAuteur, rbMotsCles, rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre, rbModifID, rbModifMDP;
+	RadioButton rbAjoutL, rbAjoutD, rbAjoutP, rbModifAdr, rbModifTel, rbAjoutAdh, rbAjoutPre, rbModifID, rbModifMDP;
 	Scene scene, scene2, scene3, scene4, scene5;
 	Stage stage2, stage3, stage4, stage5;
 	TabPane tabPane;
@@ -192,28 +192,14 @@ public class Interface extends Application{
 			hBoxSearch.setAlignment(Pos.CENTER_LEFT);
 			hBoxSearch.setSpacing(10);
 			HBox.setMargin(hBoxSearch, new Insets(5));
-			Text txtSearch = new Text("Recherche par: ");
+			Text txtSearch = new Text("Recherche dans le catalogue: ");
 			VBox.setMargin(hBoxSearch, new Insets(5));
 			
-			ToggleGroup tgSearch = new ToggleGroup();
-			rbAuteur = new RadioButton();
-			rbAuteur.setText("auteur");
-			rbMotsCles = new RadioButton();
-			rbMotsCles.setText("mots clés");
-			rbMotsCles.setDisable(true);
-			rbMotsCles.setOnAction(gc);
-			rbMotsCles.setOnAction(gc);
-			tgSearch.getToggles().addAll(rbAuteur, rbMotsCles);
+			txtRecherche = new TextField();
+			txtRecherche.setPrefWidth(200);
+			txtRecherche.setMinWidth(200);
 			
-			txtRecherche = new TextField("");
-			txtRecherche.setPrefWidth(100);
-			txtRecherche.setMinWidth(100);
-			
-			btnSearch = new Button();
-			btnSearch.setText("Rechercher");
-			btnSearch.setOnAction(gc);
-			
-			hBoxSearch.getChildren().addAll(txtSearch, rbAuteur, rbMotsCles, txtRecherche, btnSearch);
+			hBoxSearch.getChildren().addAll(txtSearch, txtRecherche);
 			
 			HBox hBoxCata = new HBox();
 			hBoxCata.setSpacing(15);
@@ -229,6 +215,28 @@ public class Interface extends Application{
 			tabDoc.setText("Documents");
 //			tabDoc.setGraphic(new ImageView(new Image("images\\icon-collection.png")));
 			
+//					RECHERCHE TITRE / MOTS CLES
+				donneesDoc = FXCollections.observableArrayList(Catalogue.getInstance().getLstDoc());
+				FilteredList<Document> filteredDoc = new FilteredList<Document>(donneesDoc, doc -> true);
+				
+				txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+					filteredDoc.setPredicate(doc -> {
+							//si rien est taper dans le textfield, laisse tout passer
+						if (newValue==null || newValue.isEmpty())
+							return true;
+							//quand il y a du text dans le textfield
+						else if (doc.getTitre().toLowerCase().contains(newValue.toLowerCase()))
+							return true;
+//				 		else if (doc.getMotsCles().toLowerCase().contains(newValue.toLowerCase()))
+//							return true; // match un des mots clés
+						else
+							return false; // match rien
+					});
+				});
+				
+				SortedList<Document> sortedDoc = new SortedList<Document>(filteredDoc);
+				sortedDoc.comparatorProperty().bind(tableDoc.comparatorProperty());
+			
 			TableColumn<Document, String> colonneNum1 = new TableColumn<Document, String> ("Numéro");
 			TableColumn<Document, String> colonneTitre1 = new TableColumn<Document, String> ("Titre");
 			TableColumn<Document, LocalDate> colonneParution1 = new TableColumn<Document, LocalDate> ("Date de parution");
@@ -240,13 +248,11 @@ public class Interface extends Application{
 			colonneParution1.setPrefWidth(120);			colonneParution1.setMaxWidth(120);
 			colonneDispo1.setPrefWidth(80);				colonneDispo1.setMaxWidth(80);
 
-			donneesDoc = FXCollections.observableArrayList(Catalogue.getInstance().getLstDoc());
 			colonneNum1.setCellValueFactory(new PropertyValueFactory<Document, String>("noDoc"));
 			colonneTitre1.setCellValueFactory(new PropertyValueFactory<Document, String>("titre"));
 			colonneParution1.setCellValueFactory(new PropertyValueFactory<Document, LocalDate>("dateParution"));
 			colonneDispo1.setCellValueFactory(new PropertyValueFactory<Document, String>("disponible"));			
-			tableDoc.setItems(donneesDoc);
-			
+			tableDoc.setItems(sortedDoc);
 			tabDoc.setContent(tableDoc);
 			
 			
@@ -265,6 +271,31 @@ public class Interface extends Application{
 			TableColumn<DVD, String> colonneRealis = new TableColumn<DVD, String> ("Réalisateur");
 			tableDvd.getColumns().addAll(colonneNum2, colonneTitre2, colonneParution2, colonneDispo2, colonneDisk, colonneRealis);
 			
+			
+		//			RECHERCHE TITRE / RÉALISATEUR / MOTS CLES
+				donneesDvd = FXCollections.observableArrayList(Catalogue.getInstance().getLstDvd());
+				FilteredList<DVD> filteredDvd = new FilteredList<DVD>(donneesDvd, disk -> true);
+				
+				txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+					filteredDvd.setPredicate(disk -> {
+							//si rien est taper dans le textfield, laisse tout passer
+						if (newValue==null || newValue.isEmpty())
+							return true;
+							//quand il y a du text dans le textfield
+						else if (disk.getTitre().toLowerCase().contains(newValue.toLowerCase()))
+							return true;
+						else if (disk.getStrRealisateur().toLowerCase().contains(newValue.toLowerCase()))
+							return true;
+		//		 		else if (disk.getMotsCles().toLowerCase().contains(newValue.toLowerCase()))
+		//					return true; // match un des mots clés
+						else
+							return false; // match rien
+					});
+				});
+				
+				SortedList<DVD> sortedDvd = new SortedList<DVD>(filteredDvd);
+				sortedDvd.comparatorProperty().bind(tableDvd.comparatorProperty());
+					
 			colonneNum2.setPrefWidth(60);				colonneNum2.setMaxWidth(60);
 			colonneTitre2.setPrefWidth(310);			colonneTitre2.setMaxWidth(310);
 			colonneParution2.setPrefWidth(120);			colonneParution2.setMaxWidth(120);
@@ -272,15 +303,13 @@ public class Interface extends Application{
 			colonneDisk.setPrefWidth(120);				colonneDisk.setMaxWidth(120);
 			colonneRealis.setPrefWidth(130);			colonneRealis.setMaxWidth(130);
 			
-			donneesDvd = FXCollections.observableArrayList(Catalogue.getInstance().getLstDvd());
 			colonneNum2.setCellValueFactory(new PropertyValueFactory<>("noDoc"));
 			colonneTitre2.setCellValueFactory(new PropertyValueFactory<>("titre"));
 			colonneParution2.setCellValueFactory(new PropertyValueFactory<>("dateParution"));
 			colonneDispo2.setCellValueFactory(new PropertyValueFactory<>("disponible"));
 			colonneDisk.setCellValueFactory(new PropertyValueFactory<>("nbDisques"));
 			colonneRealis.setCellValueFactory(new PropertyValueFactory<>("strRealisateur"));
-			tableDvd.setItems(donneesDvd);
-			
+			tableDvd.setItems(sortedDvd);
 			tabDvd.setContent(tableDvd);
 			
 						
@@ -290,31 +319,29 @@ public class Interface extends Application{
 			tabLivre.setText("Livre");
 //			tabLivre.setGraphic(new ImageView(new Image("images/icon-livre.png")));
 			
-			
-//					RECHERCHE AUTEUR & MOTS CLES
+//					RECHERCHE TITRE / AUTEUR / MOTS CLES
 				donneesLivres = FXCollections.observableArrayList(Catalogue.getInstance().getLstLvr());
 				FilteredList<Livre> filteredLiv = new FilteredList<Livre>(donneesLivres, book -> true);
+				
 				txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
-					System.out.println("listening: " + newValue.toString() + newValue);
 					filteredLiv.setPredicate(book -> {
-							//si rien est taper dans le textfield
-						if (newValue==null || newValue.isEmpty())
+						//si rien est taper dans le textfield, laisse tout passer
+						if (newValue==null || newValue.isEmpty()) 
 							return true;
-						
 							//quand il y a du text dans le textfield
-						if (book.getAuteur().toLowerCase().indexOf(newValue.toLowerCase()) != -1) 
+						else if (book.getTitre().toLowerCase().contains(newValue.toLowerCase()))
 							return true;
-						else if (book.getMotsCles().toLowerCase().indexOf(newValue.toLowerCase()) != -1)
-							return true;
+						else if (book.getAuteur().toLowerCase().contains(newValue.toLowerCase())) 
+							return true; // match auteur
+//						else if (book.getMotsCles().toLowerCase().contains(newValue.toLowerCase()))
+//							return true; // match un des mots clés
 						else
-							return false;
+							return false; // match rien
 					});
 				});
 				
-				
 				SortedList<Livre> sortedLivre = new SortedList<Livre>(filteredLiv);
 				sortedLivre.comparatorProperty().bind(tableLivre.comparatorProperty());
-				
 				
 			TableColumn<Livre, String> colonneNum3 = new TableColumn<Livre, String> ("Numéro");
 			TableColumn<Livre, String> colonneTitre3 = new TableColumn<Livre, String> ("Titre");
@@ -360,15 +387,35 @@ public class Interface extends Application{
 			colonneVol.setPrefWidth(120);				colonneVol.setMaxWidth(120);
 			colonnePerio.setPrefWidth(140);				colonnePerio.setMaxWidth(150);
 			
-			donneesPerio = FXCollections.observableArrayList(Catalogue.getInstance().getLstPer());
+//					RECHERCHE TITRE / MOTS CLES
+				donneesPerio = FXCollections.observableArrayList(Catalogue.getInstance().getLstPer());
+				FilteredList<Periodique> filteredPer = new FilteredList<Periodique>(donneesPerio, per -> true);
+				
+				txtRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+					filteredPer.setPredicate(per -> {
+							//si rien est taper dans le textfield, laisse tout passer
+						if (newValue==null || newValue.isEmpty())
+							return true;
+							//quand il y a du text dans le textfield
+						else if (per.getTitre().toLowerCase().contains(newValue.toLowerCase()))
+							return true;
+//						else if (book.getMotsCles().toLowerCase().contains(newValue.toLowerCase()))
+//							return true; // match un des mots clés
+						else
+							return false; // match rien
+					});
+				});
+				
+				SortedList<Periodique> sortedPer = new SortedList<Periodique>(filteredPer);
+				sortedPer.comparatorProperty().bind(tablePerio.comparatorProperty());
+		
 			colonneNum4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("noDoc"));
 			colonneTitre4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("titre"));
 			colonneParution4.setCellValueFactory(new PropertyValueFactory<Periodique, LocalDate>("dateParution"));
 			colonneDispo4.setCellValueFactory(new PropertyValueFactory<Periodique, String>("disponible"));
 			colonneVol.setCellValueFactory(new PropertyValueFactory<Periodique, Integer>("noVolume"));
 			colonnePerio.setCellValueFactory(new PropertyValueFactory<Periodique, Integer>("noPeriodique"));
-			tablePerio.setItems(donneesPerio);
-			
+			tablePerio.setItems(sortedPer);
 			tabPerio.setContent(tablePerio);
 			
 			tabUtil = new Tab();
@@ -1248,12 +1295,6 @@ public class Interface extends Application{
 				}
 			}
 			
-//			RECHERCHE PAR AUTEUR OU MOT CLÉS
-			if (e.getSource() == btnSearch) {
-				if (txtRecherche.getLength()==0) {
-					Optional<ButtonType> retour = afficherBoiteInfo(11);
-				}
-			}
 			
 //			AJOUT DOCUMENT DANS CATALOGUE
 			if(e.getSource() == btnCataConfir) {
