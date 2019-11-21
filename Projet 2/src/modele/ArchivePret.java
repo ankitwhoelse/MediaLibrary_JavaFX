@@ -62,7 +62,7 @@ public class ArchivePret implements Serializable{
 		return instance;
 	}
 
-	public static void serialiseArchivePret() {
+	public void serialiseArchivePret() {
 		try {
 			FileOutputStream fichier = new FileOutputStream("archive.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);

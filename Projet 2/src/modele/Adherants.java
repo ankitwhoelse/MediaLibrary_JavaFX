@@ -29,6 +29,7 @@ public class Adherants implements Serializable{
 	
 				instance = (Adherants) is.readObject();
 				lstAdherants = instance.getLstAdherants();
+				compteurID = instance.getCompteurID();
 				System.out.println("désérialise adherants");
 
 				is.close();

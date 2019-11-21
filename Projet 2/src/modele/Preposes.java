@@ -59,7 +59,7 @@ public class Preposes implements Serializable{
 		return lstPreposes;
 	}
 	
-	public static void serialisePreposes() {
+	public void serialisePreposes() {
 		try {
 			FileOutputStream fichier = new FileOutputStream("preposes.ser");
 			ObjectOutputStream os = new ObjectOutputStream(fichier);
