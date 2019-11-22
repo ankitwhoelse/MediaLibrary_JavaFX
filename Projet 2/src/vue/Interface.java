@@ -901,6 +901,8 @@ public class Interface extends Application{
 			hBoxBtn.getChildren().addAll(btnQuit, btnFermer);
 			vBox2.getChildren().addAll(hBoxSearch, tabPane, hBoxBtn);
 			root2.setCenter(vBox2);
+			
+			calculAmendes();
 				
 			
 //					< / INTERFACE DE CATALOGUE >
@@ -1707,6 +1709,38 @@ public class Interface extends Application{
 		}
 		System.out.println(adher);
 		return adher;
+	}
+	
+// 	CALCUL DES AMENDES
+	public void calculAmendes() {
+		for (Adherant adher: Adherants.getInstance().getLstAdherants()) {
+			for (Pret pret: adher.getLstPrets()) {
+				long differenceDate = LocalDate.now().toEpochDay() - pret.getDateEmprunt().toEpochDay();
+				String typeDoc = TypeDocument(pret.getNoDoc());
+				
+				switch(typeDoc) {
+				case "lvr":
+					if(differenceDate <= 14) {
+						long jourRetard = differenceDate - 14;
+						pret.setAmende((Double) 0.5 * jourRetard);
+					}
+					break;
+				case "dvd":
+					if(differenceDate <= 7) {
+						long jourRetard = differenceDate - 7;
+						pret.setAmende((Double) 0.5 * jourRetard);
+					}
+					break;
+				default:
+					if(differenceDate <= 3) {
+						long jourRetard = differenceDate - 3;
+						pret.setAmende((Double) 0.5 * jourRetard);
+					}
+					break;
+				}
+			}
+		}
+		System.out.println("Les amendes ont étés calculées");
 	}
 
 }	// FIN DE LA CLASSE
